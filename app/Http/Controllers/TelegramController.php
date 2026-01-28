@@ -134,6 +134,6 @@ class TelegramController extends Controller
             ],
         ];
         \App\Facades\BotManager::bot()
-            ->replyInlineKeyboard("Система управления доставками", $keyboard);
+            ->replyInlineKeyboard("Система управления заявками", $keyboard);
     }
 }
