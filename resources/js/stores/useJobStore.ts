@@ -11,12 +11,12 @@ export const useJobStore = defineStore('job', {
         successMessage: null as string | null
     }),
     actions: {
-        async submitAdminForm(formData: any) {
+        async createVolunteerPdfReport(formData: any) {
             return this.submitForm(
-                'admin-job',
+                'volunteer-job-pdf',
                 formData,
-                'Заявка администратора отправлена',
-                'Ошибка отправки заявки администратора'
+                'Заявка волонтёра отправлена',
+                'Ошибка отправки заявки волонтёра'
             )
         },
 

@@ -362,7 +362,7 @@
 
         <nav style="position: sticky; bottom:20px;z-index: 100;">
             <div class="btn-group w-100" role="group" aria-label="Basic example">
-                <template v-if="step>1&&step<5">
+                <template v-if="step>1&&step<=5">
                     <button type="button"
                             @click="step--"
                             class="btn btn-light p-3">Назад
@@ -377,7 +377,7 @@
                     </button>
                 </template>
 
-                <template v-if="step===5">
+                <template v-if="step===6">
                     <button
                         type="submit" class="btn btn-primary p-3">Отправить
                     </button>
@@ -391,6 +391,8 @@
 </template>
 
 <script>
+import {useJobStore} from "@/stores/useJobStore";
+
 export default {
     name: "VolunteerForm",
 
@@ -398,6 +400,7 @@ export default {
         return {
             step: 1,
             maxStep: 6,
+            jobStore: useJobStore(),
             skillsList: [
                 "Работа с людьми",
                 "Физическая работа",
@@ -536,7 +539,9 @@ export default {
 
             // Финальная отправка
             console.log("SUBMIT DATA:", JSON.parse(JSON.stringify(this.form)));
-            alert("Анкета отправлена!");
+            this.jobStore.createVolunteerPdfReport(this.form)
+
+            this.$emit("success")
         },
     },
 };

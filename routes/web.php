@@ -110,7 +110,8 @@ Route::prefix("bot-api")
             Route::prefix('incoming')->group(function () {
                 Route::get('/', [IncomingReportsController::class, 'index'])->name('reports.incoming.index');
                 Route::post('/', [IncomingReportsController::class, 'store'])->name('reports.incoming.store');
-                Route::get('/{id}', [IncomingReportsController::class, 'show'])->name('reports.incoming.show');
+                Route::post('/pdf-incoming-report', [\App\Http\Controllers\PdfController::class, 'generateIncomingPdf'])->name('reports.incoming.pdf-report');
+                 Route::get('/{id}', [IncomingReportsController::class, 'show'])->name('reports.incoming.show');
                 Route::put('/{id}', [IncomingReportsController::class, 'update'])->name('reports.incoming.update');
                 Route::delete('/{id}', [IncomingReportsController::class, 'destroy'])->name('reports.incoming.destroy');
             });
@@ -128,6 +129,7 @@ Route::prefix("bot-api")
             Route::prefix('events')->group(function () {
                 Route::get('/', [EventRequestsController::class, 'index'])->name('reports.events.index');
                 Route::post('/', [EventRequestsController::class, 'store'])->name('reports.events.store');
+                Route::post('/pdf-event-report', [\App\Http\Controllers\PdfController::class, 'generateEventPdf'])->name('reports.event.pdf-report');
                 Route::get('/{id}', [EventRequestsController::class, 'show'])->name('reports.events.show');
                 Route::put('/{id}', [EventRequestsController::class, 'update'])->name('reports.events.update');
                 Route::delete('/{id}', [EventRequestsController::class, 'destroy'])->name('reports.events.destroy');
@@ -138,14 +140,9 @@ Route::prefix("bot-api")
         Route::prefix('forms')
             ->middleware(["tg.role:user"])
             ->group(function () {
-                // Заявка администратора
-                Route::post('/admin-job', [AdminJobController::class, 'store']);
-                // Заявка торгового агента
-                Route::post('/agent-job', [AgentJobController::class, 'store']);
-                // Заявка поставщика
-                Route::post('/supplier-job', [SupplierJobController::class, 'store']);
-                // Заявка клиента (оптовое сотрудничество)
-                Route::post('/client-job', [ClientJobController::class, 'store']);
+                // Заявка волонтера
+                Route::post('/volunteer-job-pdf', [\App\Http\Controllers\PdfController::class, 'generateVolunteerPdf']);
+
             });
 
         // 🔹 Экспорты

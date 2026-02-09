@@ -12,8 +12,9 @@ class MunicipalitySeeder extends Seeder
      */
     public function run(): void
     {
+        //
         $okruga = [
-            "ДНР (Народный Совет)",
+
             "Амвросиевский м.о.",
             "Володарский м.о.",
             "Горловский г.о.",
@@ -35,10 +36,21 @@ class MunicipalitySeeder extends Seeder
             "Новоазовский м.о.",
         ];
 
+        Municipality::query()
+            ->create([
+                "name" =>"ДНР (Народный Совет)",
+                "config"=>json_encode([
+                    "access_role"=>1
+                ])
+            ]);
+
         foreach ($okruga as $okrug)
             Municipality::query()
                 ->create([
-                    "name" => $okrug
+                    "name" => $okrug,
+                    "config"=>json_encode([
+                        "access_role"=>0
+                    ])
                 ]);
     }
 }

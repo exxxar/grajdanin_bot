@@ -50,7 +50,7 @@ export async function makeAxiosFactory(
     } catch (error: any) {
         // Проверка на 419 ошибку
         if (error?.response?.status === 419) {
-            alertStore.show("Сессия истекла, страница будет перезагружена", "warning");
+            alertStore.show("Сессия истекла, страница будет перезагружена", "error");
             window.location.reload();
             // @ts-ignore
             return Promise.reject("Сессия истекла");

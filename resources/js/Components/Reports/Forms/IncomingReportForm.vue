@@ -14,9 +14,9 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
                     :style="{ width: (step / maxStep * 100) + '%' }"
                 ></div>
             </div>
-            <p class="text-center mt-2">Шаг {{ step+1 }} из {{ maxStep+1 }}</p>
+            <p class="text-center mt-2">Шаг {{ step }} из {{ maxStep  }}</p>
         </div>
-        <template v-if="step===0">
+        <template v-if="step===1">
             <h5 class="mb-2">Регистрация жалобы</h5>
 
             <template v-if="user.role === 0">
@@ -35,34 +35,38 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
 
             <div class="form-floating mb-2">
                 <select class="form-select" v-model="form.municipality_id" required>
-                    <option v-for="m in municipalityStore.items" :key="m.id" :value="m.id">
-                        {{ m.name }}
-                    </option>
+                    <template v-for="m in municipalityStore.items">
+                        <option
+                            v-if="(m.config?.access_role||0)>=user.role"
+                            :key="m.id" :value="m.id">
+                            {{ m.name }}
+                        </option>
+                    </template>
                 </select>
                 <label>Муниципалитет</label>
             </div>
 
 
         </template>
-        <template v-if="step===1">
+        <template v-if="step===2">
             <h5 class="mb-2">Какая у вас проблемная ситуация?</h5>
             <IssueSelector
                 v-model="form.problems"
                 :issues="problems"></IssueSelector>
         </template>
-        <template v-if="step===2">
+        <template v-if="step===3">
             <h5 class="mb-2">Способы решения проблемы</h5>
             <IssueSelector
                 v-model="form.solutions"
                 :issues="solutions"></IssueSelector>
         </template>
-        <template v-if="step===3">
+        <template v-if="step===4">
             <h5 class="mb-2">Какие сложности возникли?</h5>
             <IssueSelector
                 v-model="form.difficulties"
                 :issues="difficulties"></IssueSelector>
         </template>
-        <template v-if="step===4">
+        <template v-if="step===5">
             <!-- REPORT SECTION -->
             <h5 class="mb-2">Дополнительная информация</h5>
 
@@ -126,7 +130,6 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
                     </div>-->
 
 
-
             <!-- received_at -->
             <div class="form-floating mb-2">
                 <input type="date" class="form-control" v-model="form.received_at">
@@ -145,12 +148,12 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
             <FileUploader v-model="form.documents"></FileUploader>
 
 
-        <AudioRecorder v-model="form.audio_files"></AudioRecorder>
+            <AudioRecorder v-model="form.audio_files"></AudioRecorder>
 
 
         </template>
 
-        <template v-if="step===5">
+        <template v-if="step===6">
             <div class="card shadow-sm border-light-subtle mb-2">
                 <div class="card-header fw-bold">
                     Сводная информация
@@ -182,17 +185,17 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
                         <li class="list-group-item" v-if="form.problems.length">
                             <strong>Проблемы:</strong>
                             <ul class="mt-1">
-                                <template v-for="(item, i) in form.problems" >
+                                <template v-for="(item, i) in form.problems">
                                     <li :key="i" v-if="item">
-                                        <h6 class="fw-bold small">{{issueStore.byId(i).name}}</h6>
-                                        <p class="mb-1 small" v-for="p in item">{{p}}</p>
+                                        <h6 class="fw-bold small">{{ issueStore.byId(i).name }}</h6>
+                                        <p class="mb-1 small" v-for="p in item">{{ p }}</p>
                                     </li>
                                 </template>
 
                             </ul>
                         </li>
                         <div class="p-2" v-else>
-                            <p class="alert alert-info mb-0" >
+                            <p class="alert alert-info mb-0">
                                 Проблемы не указаны текстом
                             </p>
                         </div>
@@ -206,24 +209,22 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
                         </li>
 
 
-
-
                         <!-- Решения -->
                         <li class="list-group-item" v-if="form.solutions.length">
                             <strong>Предложенные решения:</strong>
                             <ul class="mt-1">
-                                <template v-for="(item, i) in form.solutions" >
+                                <template v-for="(item, i) in form.solutions">
                                     <li :key="i" v-if="item">
-                                        <h6 class="fw-bold small">{{issueStore.byId(i).name}}</h6>
-                                        <p class="mb-1 small" v-for="p in item">{{p}}</p>
+                                        <h6 class="fw-bold small">{{ issueStore.byId(i).name }}</h6>
+                                        <p class="mb-1 small" v-for="p in item">{{ p }}</p>
                                     </li>
                                 </template>
                             </ul>
                         </li>
                         <div class="p-2" v-else>
-                        <p class="alert alert-info mb-0" >
-                            Предложений ро решению проблемы не поступило
-                        </p>
+                            <p class="alert alert-info mb-0">
+                                Предложений ро решению проблемы не поступило
+                            </p>
                         </div>
 
 
@@ -231,10 +232,10 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
                         <li class="list-group-item" v-if="form.difficulties.length">
                             <strong>Трудности:</strong>
                             <ul class="mt-1">
-                                <template v-for="(item, i) in form.difficulties" >
+                                <template v-for="(item, i) in form.difficulties">
                                     <li :key="i" v-if="item">
-                                        <h6 class="fw-bold small">{{issueStore.byId(i).name}}</h6>
-                                        <p class="mb-1 small" v-for="p in item">{{p}}</p>
+                                        <h6 class="fw-bold small">{{ issueStore.byId(i).name }}</h6>
+                                        <p class="mb-1 small" v-for="p in item">{{ p }}</p>
                                     </li>
                                 </template>
                             </ul>
@@ -251,7 +252,7 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
                             <strong>Форматы помощи:</strong>
                             <ul class="mt-1">
                                 <li v-for="(item, i) in form.help_formats" :key="i">
-                                   <p class="mb-1 small"> {{helpStore.byId(item).name}}</p>
+                                    <p class="mb-1 small"> {{ helpStore.byId(item).name }}</p>
                                 </li>
                             </ul>
                         </li>
@@ -273,22 +274,22 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
 
         <nav style="position: sticky; bottom:20px;z-index: 100;">
             <div class="btn-group w-100" role="group" aria-label="Basic example">
-                <template v-if="step>0&&step<5">
+                <template v-if="step>1&&step<6">
                     <button type="button"
-                            @click="step--"
+                            @click="goBack"
                             class="btn btn-light p-3">Назад
                     </button>
                     <button type="submit"
                             class="btn btn-primary p-3">Вперед
                     </button>
                 </template>
-                <template v-if="step===0">
+                <template v-if="step===1">
                     <button type="submit"
                             class="btn btn-primary p-3">Приступить
                     </button>
                 </template>
 
-                <template v-if="step===5">
+                <template v-if="step===6">
                     <button
                         type="submit" class="btn btn-primary p-3">Отправить
                     </button>
@@ -304,16 +305,16 @@ import {useMunicipalitiesStore} from "@/stores/useMunicipalitiesStore";
 import {useIssueCategoriesStore} from "@/stores/useIssueCategoriesStore";
 import {useUsersStore} from "@/stores/users";
 import {useHelpFormatsStore} from "@/stores/useHelpFormatsStore";
+import {useIncomingReportsStore} from "@/stores/reports/useIncomingReportsStore";
 
 export default {
     name: "ReportForm",
+    props: ["type"],
     components: {},
-
-
     data() {
         return {
-            step: 0,
-            maxStep: 5,
+            step: 1,
+            maxStep: 6,
             isRecording: false,
             mediaRecorder: null,
             audioChunks: [],
@@ -321,6 +322,7 @@ export default {
             userStore: useUsersStore(),
             municipalityStore: useMunicipalitiesStore(),
             issueStore: useIssueCategoriesStore(),
+            incomingReport: useIncomingReportsStore(),
             selected_problem: null,
             form: {
                 type: 0,
@@ -380,7 +382,15 @@ export default {
         this.form.received_at = formatted;
     },
     methods: {
+        goBack() {
+            if (this.user.role > 0) {
+                this.step--
+                return
+            }
 
+            this.step = this.step - 1 === 4 || this.step - 1 === 3 ? 2 : this.step - 1
+
+        },
 
         availableHelpFormats(index) {
             const selectedIds = this.form.help_formats.filter(
@@ -406,10 +416,15 @@ export default {
 
         submitForm() {
             this.step++;
-            if (this.step<5)
+            if (this.step <6)
                 return;
             // Здесь отправка формы
             console.log("FORM DATA:", this.form);
+
+            this.incomingReport.createIncomingPdfReport(this.form)
+
+            this.$emit("success")
+
         }
     }
 };

@@ -172,6 +172,7 @@ return [
         App\Providers\BusinessLogicServiceProvider::class,
         Telegram\Bot\Laravel\TelegramServiceProvider::class,
         BotManagerServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
 
     ])->toArray(),
 
@@ -192,6 +193,7 @@ return [
         'StartCodesService' => \App\Facades\StartCodesService::class,
         'Telegram' => Telegram\Bot\Laravel\Facades\Telegram::class,
         'BusinessLogic' => App\Facades\BusinessLogicFacade::class,
+        'PDF' => Barryvdh\DomPDF\Facade\Pdf::class,
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 

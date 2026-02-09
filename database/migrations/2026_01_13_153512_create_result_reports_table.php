@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('report_id')->constrained("reports");
             $table->string('topic');
+            $table->integer('importance')->default(0);
             $table->longText('description')->nullable();
             $table->json('actions')->nullable();
             $table->json('result')->nullable();

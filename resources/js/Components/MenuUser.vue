@@ -26,21 +26,21 @@ import VolunteerForm from "@/Components/Volunteers/VolunteerForm.vue";
             @click="tab='main'"
             class="btn btn-light text-secondary mb-3" style="position: sticky; top:80px; z-index: 100;">К меню</button>
 
-        <IncomingReportForm></IncomingReportForm>
+        <IncomingReportForm v-on:success="tab='main'"></IncomingReportForm>
     </template>
 
     <template v-if="tab==='event-request'">
         <button
             @click="tab='main'"
             class="btn btn-light text-secondary mb-3" style="position: sticky; top:80px; z-index: 100;">К меню</button>
-        <EventRequestForm></EventRequestForm>
+        <EventRequestForm  v-on:success="tab='main'"></EventRequestForm>
     </template>
 
     <template v-if="tab==='volunteer-form'">
         <button
             @click="tab='main'"
             class="btn btn-light text-secondary mb-3" style="position: sticky; top:80px; z-index: 100;">К меню</button>
-        <VolunteerForm></VolunteerForm>
+        <VolunteerForm  v-on:success="tab='main'"></VolunteerForm>
     </template>
 
 

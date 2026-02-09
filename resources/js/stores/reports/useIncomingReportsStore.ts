@@ -46,6 +46,11 @@ export const useIncomingReportsStore = defineStore('incomingReports', {
             this.items.push(data)
             return data as IncomingReport
         },
+        async createIncomingPdfReport(payload: Omit<IncomingReport, 'id'>) {
+            const { data } = await makeAxiosFactory(path+"/pdf-incoming-report", 'POST', payload)
+            this.items.push(data)
+            return data as IncomingReport
+        },
         async update(id: number, payload: object) {
             const { data } = await makeAxiosFactory(`${path}/${id}`, 'PUT', payload)
             const idx = this.items.findIndex(r => r.id === id)

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { makeAxiosFactory } from '../utillites/makeAxiosFactory'
+import {IncomingReport} from "./useIncomingReportsStore";
 
 export interface EventRequest {
     id: number
@@ -38,6 +39,10 @@ export const useEventRequestsStore = defineStore('eventRequests', {
             } finally {
                 this.loading = false
             }
+        },
+        async createEventPdfRequest(payload: object) {
+            const { data } = await makeAxiosFactory(path+"/pdf-event-report", 'POST', payload)
+            return data as EventRequest
         },
         async fetchOne(id: number) {
             const { data } = await makeAxiosFactory(`${path}/${id}`, 'GET')

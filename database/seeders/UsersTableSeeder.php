@@ -43,14 +43,14 @@ class UsersTableSeeder extends Seeder
             "Рожков Кирилл Васильевич",
             "Селезнёв Георгий Константинович",
             "Ситников Евгений Александрович",
-            "Тамразян Армен Михаелович", ];
+            "Тамразян Армен Михаелович",];
 
         DB::table('users')->insert([
             'name' => "СуперАдмин",
             'email' => 'test@example.com',
             'fio_from_telegram' => "Test Test",
             'telegram_chat_id' => null,
-            'role' => 4,
+            'role' => 0,
             'email_verified_at' => now(),
             'password' => Hash::make('secret'), // Пароль secret
             'remember_token' => Str::random(10),
@@ -58,18 +58,18 @@ class UsersTableSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
-        foreach($people as $p)
-        DB::table('users')->insert([
-            'name' => $p,
-            'email' => Str::uuid().'@example.com',
-            'fio_from_telegram' => $p,
-            'telegram_chat_id' => null,
-            'role' => 2,
-            'email_verified_at' => now(),
-            'password' => Hash::make('secret'), // Пароль secret
-            'remember_token' => Str::random(10),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        foreach ($people as $p)
+            DB::table('users')->insert([
+                'name' => $p,
+                'email' => Str::uuid() . '@example.com',
+                'fio_from_telegram' => $p,
+                'telegram_chat_id' => null,
+                'role' => 2,
+                'email_verified_at' => now(),
+                'password' => Hash::make('secret'), // Пароль secret
+                'remember_token' => Str::random(10),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
     }
 }

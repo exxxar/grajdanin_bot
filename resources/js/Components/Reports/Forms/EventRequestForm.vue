@@ -111,7 +111,9 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
 
         <AudioRecorder v-model="form.audio_files"></AudioRecorder>
 
-        <button class="btn btn-primary w-100 p-3">Отправить</button>
+        <button
+            type="submit"
+            class="btn btn-primary w-100 p-3">Отправить</button>
     </form>
 </template>
 
@@ -120,6 +122,7 @@ import {useHelpFormatsStore} from "@/stores/useHelpFormatsStore";
 import {useUsersStore} from "@/stores/users";
 import {useMunicipalitiesStore} from "@/stores/useMunicipalitiesStore";
 import {useIssueCategoriesStore} from "@/stores/useIssueCategoriesStore";
+import {useEventRequestsStore} from "@/stores/reports/useEventRequestsStore";
 
 export default {
     name: "EventRequestForm",
@@ -130,6 +133,7 @@ export default {
             userStore: useUsersStore(),
             municipalityStore: useMunicipalitiesStore(),
             issueStore: useIssueCategoriesStore(),
+            eventRequestStore: useEventRequestsStore(),
             form: {
                 event_date: "",
                 description: "",
@@ -185,7 +189,11 @@ export default {
             )
         },
         submitForm() {
-            console.log("FORM:", this.form);
+            console.log("12FORM:", this.form);
+
+            this.eventRequestStore.createEventPdfRequest(this.form)
+
+            this.$emit("success")
         }
     }
 };
