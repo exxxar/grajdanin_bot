@@ -39,7 +39,7 @@ Route::any('/register-webhook', [\App\Http\Controllers\SystemController::class, 
 Route::post('/webhook', [\App\Http\Controllers\SystemController::class, "handler"]);
 Route::get("/blocked", [\App\Http\Controllers\SystemController::class, "blockedPage"])
     ->name("blocked");
-Route::get("/app", [\App\Http\Controllers\SystemController::class, "homePage"]);
+
 Route::get("/", function (){
     return view("welcome");
 });
@@ -201,4 +201,6 @@ Route::prefix("bot-api")
     });
 
 
+Route::get("/app/{any?}", [\App\Http\Controllers\SystemController::class, "homePage"])
+    ->where('any', '.*');
 
