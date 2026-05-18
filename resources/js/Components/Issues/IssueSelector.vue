@@ -1,11 +1,11 @@
 <template>
     <div class="row row-cols-2">
-        <div class="col mb-0 mt-0" v-for="item in issues">
+        <div class="col mb-0 mt-0 p-1 " v-for="item in issues">
             <div
                 data-bs-toggle="modal" data-bs-target="#choose-modal"
                 @click="selectIssueCategory(item)"
                 style="min-height:120px;"
-                class="card mb-2 border-light-subtle shadow-sm">
+                class="card border-light-subtle shadow-sm rounded-23">
                 <div class="card-body d-flex flex-column justify-content-center align-items-center p-1">
                     <div
                         style="font-size:36px;"
@@ -18,8 +18,8 @@
 
                     <span
                         v-if="(problems[item.id]?.length || 0)>0"
-                        class="badge bg-warning"
-                        style="position:absolute; top:0px;right:0px;font-size:14px;">
+                        class="badge bg-warning rounded-3"
+                        style="position:absolute; top:10px;right:10px;font-size:14px;">
                                 {{ problems[item.id]?.length || 0 }}</span>
                 </div>
 

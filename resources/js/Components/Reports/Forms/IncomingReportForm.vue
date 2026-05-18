@@ -4,7 +4,7 @@ import AudioRecorder from "@/Components/Reports/Modules/AudioRecorder.vue";
 import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
 </script>
 <template>
-    <form @submit.prevent="submitForm" class="p-3 border rounded">
+    <form @submit.prevent="submitForm">
         <!-- Прогресс -->
         <div class="my-3">
             <div class="progress">
@@ -277,7 +277,7 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
                 <template v-if="step>1&&step<6">
                     <button type="button"
                             @click="goBack"
-                            class="btn btn-light p-3">Назад
+                            class="btn btn-light p-3 border-light-subtle">Назад
                     </button>
                     <button type="submit"
                             class="btn btn-primary p-3">Вперед

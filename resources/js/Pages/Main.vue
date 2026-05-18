@@ -51,7 +51,7 @@ import Layout from "@/Layouts/Layout.vue";
                 </div>
 
                 <div class="modal-body">
-                    <p>Вы можете установить Kanban как приложение и запускать его прямо с рабочего стола.</p>
+                    <p>Вы можете установить приложение к себе в один клик и запускать его прямо с рабочего стола.</p>
                 </div>
 
                 <div class="modal-footer">

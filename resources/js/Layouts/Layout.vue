@@ -41,12 +41,12 @@ import PrimaryForm from "@/Components/Users/Forms/PrimaryForm.vue";
 
     <footer class="text-body-secondary" style="padding:0px 0px 90px 0px;">
 
-        <div class="container d-flex justify-content-center flex-column align-items-center">
+<!--        <div class="container d-flex justify-content-center flex-column align-items-center">
             <p class="d-flex justify-content-center my-3">
                 <a href="javascript:void(0)" @click="scrollTop"><i class="fa-solid fa-arrow-up mr-2"></i>Вернуться
                     наверх</a>
             </p>
-        </div>
+        </div>-->
     </footer>
 
 

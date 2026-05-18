@@ -609,6 +609,140 @@
                 margin-bottom:20px;
             }
         }
+
+        /* ========================================
+   TABLET MODAL
+======================================== */
+
+        .tablet-modal{
+            max-width:950px;
+        }
+
+        .tablet-frame{
+            position:relative;
+
+            background:#111827;
+
+            border:none;
+
+            border-radius:38px;
+
+            padding:18px;
+
+            overflow:hidden;
+
+            box-shadow:
+                0 40px 100px rgba(0,0,0,.35);
+        }
+
+        /* CAMERA */
+
+        .tablet-camera{
+            position:absolute;
+
+            top:10px;
+            left:50%;
+
+            transform:translateX(-50%);
+
+            width:90px;
+            height:10px;
+
+            border-radius:999px;
+
+            background:#1f2937;
+
+            z-index:20;
+        }
+
+        /* SCREEN */
+
+        .tablet-screen{
+            background:#fff;
+
+            border-radius:28px;
+
+            overflow:hidden;
+
+            min-height:620px;
+
+            display:flex;
+            flex-direction:column;
+        }
+
+        /* HEADER */
+
+        .tablet-header{
+            height:72px;
+
+            border-bottom:1px solid #e2e8f0;
+
+            padding:0 24px;
+
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+
+            background:#fff;
+        }
+
+        /* BODY */
+
+        .tablet-body{
+            flex:1;
+
+            background:#f5f7fb;
+        }
+
+        /* IFRAME */
+
+        .tablet-iframe{
+            width:100%;
+            height:85vh;
+
+            border:none;
+
+            background:#fff;
+        }
+
+        /* REMOVE BOOTSTRAP BG */
+
+        .modal-content{
+            background:transparent;
+        }
+
+        /* BACKDROP */
+
+        .modal-backdrop.show{
+            opacity:.7;
+            backdrop-filter:blur(6px);
+        }
+
+        /* MOBILE */
+
+        @media(max-width:991px){
+
+            .tablet-modal{
+                max-width:95%;
+            }
+
+            .tablet-frame{
+                border-radius:28px;
+                padding:12px;
+            }
+
+            .tablet-screen{
+                min-height:500px;
+                border-radius:20px;
+            }
+
+            .tablet-header{
+                height:64px;
+                padding:0 18px;
+            }
+
+
+        }
     </style>
 </head>
 <body>
@@ -687,6 +821,15 @@
 
                 </div>
 
+                <p class="text-center my-3">
+                    <a
+                        data-bs-toggle="modal"
+                        data-bs-target="#tabletModal"
+                        href="javascript:void(0)" class="btn btn-link text-primary">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        Открыть для работы
+                        </a>
+                </p>
             </div>
 
         </div>
@@ -1012,5 +1155,39 @@
 
 </footer>
 
+<!-- TABLET MODAL -->
+<div class="modal fade"
+     id="tabletModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered tablet-modal">
+
+        <div class="modal-content tablet-frame">
+
+            <!-- CAMERA -->
+            <div class="tablet-camera"></div>
+
+            <!-- SCREEN -->
+            <div class="tablet-screen">
+
+
+
+                <!-- CONTENT -->
+                <div class="tablet-body">
+
+                    <iframe src="/app"
+                            class="tablet-iframe"></iframe>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

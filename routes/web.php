@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Jenssegers\Agent\Agent;
 use Maatwebsite\Excel\Facades\Excel;
 
 /*
@@ -40,7 +41,13 @@ Route::post('/webhook', [\App\Http\Controllers\SystemController::class, "handler
 Route::get("/blocked", [\App\Http\Controllers\SystemController::class, "blockedPage"])
     ->name("blocked");
 
-Route::get("/", function (){
+Route::get("/", function (Request $request){
+    $agent = new Agent();
+
+    if ($agent->isMobile()) {
+        return redirect('/app/');
+    }
+
     return view("welcome");
 });
 
