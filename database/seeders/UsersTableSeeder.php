@@ -48,8 +48,7 @@ class UsersTableSeeder extends Seeder
         DB::table('users')->insert([
             'name' => "СуперАдмин",
             'email' => 'test@example.com',
-            'fio_from_telegram' => "Test Test",
-            'telegram_chat_id' => null,
+            'uuid' => Str::uuid(),
             'role' => 0,
             'email_verified_at' => now(),
             'password' => Hash::make('secret'), // Пароль secret
@@ -62,8 +61,7 @@ class UsersTableSeeder extends Seeder
             DB::table('users')->insert([
                 'name' => $p,
                 'email' => Str::uuid() . '@example.com',
-                'fio_from_telegram' => $p,
-                'telegram_chat_id' => null,
+                'uuid' => Str::uuid(),
                 'role' => 2,
                 'email_verified_at' => now(),
                 'password' => Hash::make('secret'), // Пароль secret

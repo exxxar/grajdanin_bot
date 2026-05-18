@@ -1,0 +1,289 @@
+
+:root {
+    /* ========================================
+       ОСНОВНАЯ ПАЛИТРА
+    ======================================== */
+
+    --color-primary: #47c2c0;
+    --color-primary-hover: #36a9a7;
+    --color-primary-light: #e7f8f8;
+    --color-primary-soft: rgba(71, 194, 192, 0.12);
+
+    /* ========================================
+       ДОПОЛНИТЕЛЬНЫЕ АКЦЕНТЫ
+    ======================================== */
+
+    --color-secondary: #5c7cfa;
+    --color-secondary-hover: #4c6ef5;
+
+    --color-success: #2fbf71;
+    --color-warning: #ffb547;
+    --color-danger: #ff6b6b;
+    --color-info: #4dabf7;
+
+    /* ========================================
+       ФОНЫ
+    ======================================== */
+
+    --color-bg: #f5f7fb;
+    --color-surface: #ffffff;
+    --color-surface-secondary: #f8fafc;
+
+    --color-card: #ffffff;
+    --color-card-hover: #fcfcfd;
+
+    /* ========================================
+       ТЕКСТ
+    ======================================== */
+
+    --color-text: #1e293b;
+    --color-text-secondary: #64748b;
+    --color-text-light: #94a3b8;
+
+    /* ========================================
+       ГРАНИЦЫ
+    ======================================== */
+
+    --color-border: #e2e8f0;
+    --color-border-light: #eef2f7;
+
+    /* ========================================
+       ТЕНИ
+    ======================================== */
+
+    --shadow-sm: 0 2px 10px rgba(15, 23, 42, 0.05);
+    --shadow-md: 0 10px 30px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.12);
+
+    /* ========================================
+       BOOTSTRAP 5 OVERRIDES
+    ======================================== */
+
+    --bs-primary: #47c2c0;
+    --bs-primary-rgb: 71, 194, 192;
+
+    --bs-secondary: #5c7cfa;
+    --bs-secondary-rgb: 92, 124, 250;
+
+    --bs-success: #2fbf71;
+    --bs-success-rgb: 47, 191, 113;
+
+    --bs-danger: #ff6b6b;
+    --bs-danger-rgb: 255, 107, 107;
+
+    --bs-warning: #ffb547;
+    --bs-warning-rgb: 255, 181, 71;
+
+    --bs-info: #4dabf7;
+    --bs-info-rgb: 77, 171, 247;
+
+    --bs-body-bg: #f5f7fb;
+    --bs-body-color: #1e293b;
+
+    --bs-border-color: #e2e8f0;
+
+    --bs-link-color: #47c2c0;
+    --bs-link-hover-color: #36a9a7;
+
+    --bs-primary-bg-subtle: rgba(71, 194, 192, 0.12);
+    --bs-primary-border-subtle: rgba(71, 194, 192, 0.24);
+}
+
+/* ========================================
+   BASE
+======================================== */
+
+body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: Inter, sans-serif;
+}
+
+.section-title {
+    color: var(--color-text);
+    font-weight: 800;
+}
+
+.section-subtitle {
+    color: var(--color-text-secondary);
+}
+
+/* ========================================
+   BUTTONS
+======================================== */
+
+.btn-primary {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background: var(--color-primary-hover) !important;
+    border-color: var(--color-primary-hover) !important;
+}
+
+.btn-outline-primary {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.btn-outline-primary:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+/* ========================================
+   CARDS
+======================================== */
+
+.card,
+.problem-card {
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: 24px;
+    box-shadow: var(--shadow-sm);
+    transition: .25s ease;
+}
+
+.card:hover,
+.problem-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.problem-icon {
+    width: 72px;
+    height: 72px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 22px;
+
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+
+    font-size: 30px;
+}
+
+/* ========================================
+   TAGS
+======================================== */
+
+.problem-tags span {
+    background: var(--color-surface-secondary);
+    border: 1px solid var(--color-border-light);
+    color: var(--color-text-secondary);
+
+    border-radius: 999px;
+    padding: 7px 14px;
+
+    font-size: .9rem;
+    font-weight: 500;
+}
+
+/* ========================================
+   HERO BLOCK
+======================================== */
+
+.hero-badge {
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+
+    border-radius: 999px;
+    padding: 10px 18px;
+
+    font-weight: 600;
+}
+
+/* ========================================
+   STATS
+======================================== */
+
+.stats-box {
+    background: linear-gradient(
+        135deg,
+        var(--color-primary),
+        #5cd6d4
+    );
+
+    color: white;
+
+    border-radius: 32px;
+
+    box-shadow: var(--shadow-lg);
+}
+
+/* ========================================
+   NAVIGATION
+======================================== */
+
+.bottom-nav {
+    background: rgba(255, 255, 255, .9);
+    backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255, 255, 255, .6);
+
+    box-shadow: var(--shadow-md);
+}
+
+.bottom-nav .nav-item {
+    color: var(--color-text-light);
+}
+
+.bottom-nav .nav-item.active {
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+}
+
+/* ========================================
+   INPUTS
+======================================== */
+
+.form-control,
+.form-select {
+    border-radius: 16px;
+    border: 1px solid var(--color-border);
+    padding: 12px 16px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 .25rem rgba(71, 194, 192, 0.18);
+}
+
+/* ========================================
+   ALERTS
+======================================== */
+
+.alert-primary {
+    background: var(--color-primary-soft);
+    border-color: rgba(71, 194, 192, 0.2);
+    color: var(--color-primary-hover);
+}
+
+/* ========================================
+   CUSTOM SCROLLBAR
+======================================== */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #edf2f7;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(71, 194, 192, 0.55);
+    border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary);
+}
+

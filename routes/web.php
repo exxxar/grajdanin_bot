@@ -35,26 +35,18 @@ use Maatwebsite\Excel\Facades\Excel;
 */
 
 
-Route::any('/register-webhook', [\App\Http\Controllers\TelegramController::class, "registerWebhooks"]);
-Route::post('/webhook', [\App\Http\Controllers\TelegramController::class, "handler"]);
-Route::get("/bot", [\App\Http\Controllers\TelegramController::class, "homePage"]);
-Route::get("/blocked", [\App\Http\Controllers\TelegramController::class, "blockedPage"])
+Route::any('/register-webhook', [\App\Http\Controllers\SystemController::class, "registerWebhooks"]);
+Route::post('/webhook', [\App\Http\Controllers\SystemController::class, "handler"]);
+Route::get("/blocked", [\App\Http\Controllers\SystemController::class, "blockedPage"])
     ->name("blocked");
-
-
-Route::get('/', function () {
-    return "ok";
-  /*  return Inertia::render('Default/Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);*/
+Route::get("/app", [\App\Http\Controllers\SystemController::class, "homePage"]);
+Route::get("/", function (){
+    return view("welcome");
 });
 
 
+
 Route::prefix("bot-api")
-    ->middleware(["tg.auth"])
     ->group(function () {
 
         Route::prefix('help-formats')->group(function () {
@@ -111,7 +103,7 @@ Route::prefix("bot-api")
                 Route::get('/', [IncomingReportsController::class, 'index'])->name('reports.incoming.index');
                 Route::post('/', [IncomingReportsController::class, 'store'])->name('reports.incoming.store');
                 Route::post('/pdf-incoming-report', [\App\Http\Controllers\PdfController::class, 'generateIncomingPdf'])->name('reports.incoming.pdf-report');
-                 Route::get('/{id}', [IncomingReportsController::class, 'show'])->name('reports.incoming.show');
+                Route::get('/{id}', [IncomingReportsController::class, 'show'])->name('reports.incoming.show');
                 Route::put('/{id}', [IncomingReportsController::class, 'update'])->name('reports.incoming.update');
                 Route::delete('/{id}', [IncomingReportsController::class, 'destroy'])->name('reports.incoming.destroy');
             });
@@ -138,7 +130,7 @@ Route::prefix("bot-api")
 
 
         Route::prefix('forms')
-            ->middleware(["tg.role:user"])
+
             ->group(function () {
                 // Заявка волонтера
                 Route::post('/volunteer-job-pdf', [\App\Http\Controllers\PdfController::class, 'generateVolunteerPdf']);
@@ -147,7 +139,7 @@ Route::prefix("bot-api")
 
         // 🔹 Экспорты
         Route::prefix('exports')
-            ->middleware(["tg.role:super"])
+
             ->group(function () {
                 Route::get('/agents', [AgentController::class, 'export'])->name('exports.agents');
                 Route::get('/birthdays', [BirthdayController::class, 'export'])->name('exports.birthdays');
@@ -162,7 +154,7 @@ Route::prefix("bot-api")
             });
 
         Route::prefix('admins')
-            ->middleware(["tg.role:agent"])
+
             ->group(function () {
                 // Список всех продаж
                 Route::get('/', [AdminController::class, 'index']);
@@ -172,10 +164,10 @@ Route::prefix("bot-api")
                 // Получить конкретную продажу по ID
             });
 
-        Route::post('/users/self', [\App\Http\Controllers\TelegramController::class, "getSelf"]);
+      //  Route::post('/users/self', [\App\Http\Controllers\TelegramController::class, "getSelf"]);
 
         Route::prefix('users')
-            ->middleware(["tg.role:agent"])
+
             ->group(function () {
                 // Список всех пользователей
                 Route::get('/', [UserController::class, 'index']);
@@ -185,32 +177,25 @@ Route::prefix("bot-api")
                 Route::get('/{id}', [UserController::class, 'show']);
 
                 // Обновить данные пользователя
-                Route::put('/{id}', [UserController::class, 'update'])
-                    ->middleware(["tg.role:super"]);
-                Route::patch('/{id}', [UserController::class, 'update'])
-                    ->middleware(["tg.role:super"]);
+                Route::put('/{id}', [UserController::class, 'update']);
+                Route::patch('/{id}', [UserController::class, 'update']);
 
 
                 // Удалить пользователя
-                Route::delete('/{id}', [UserController::class, 'destroy'])
-                    ->middleware(["tg.role:super"]);
+                Route::delete('/{id}', [UserController::class, 'destroy']);
                 // 🔹 Дополнительные маршруты для ролей и статусов
 
                 Route::get('/{id}/tg', [UserController::class, 'getTelegramLink']);
                 // Изменить роль пользователя
-                Route::post('/{id}/role', [UserController::class, 'updateRole'])
-                    ->middleware(["tg.role:super"]);
+                Route::post('/{id}/role', [UserController::class, 'updateRole']);
                 // Изменить процент
                 Route::get('/{id}/percent', [UserController::class, 'updatePercent']);
                 // Изменить статус работы (is_work)
-                Route::post('/{id}/work-status', [UserController::class, 'updateWorkStatus'])
-                    ->middleware(["tg.role:super"]);
+                Route::post('/{id}/work-status', [UserController::class, 'updateWorkStatus']);
                 // Заблокировать пользователя
-                Route::get('/{id}/block', [UserController::class, 'block'])
-                    ->middleware(["tg.role:super"]);
+                Route::get('/{id}/block', [UserController::class, 'block']);
                 // Разблокировать пользователя
-                Route::get('/{id}/unblock', [UserController::class, 'unblock'])
-                    ->middleware(["tg.role:super"]);
+                Route::get('/{id}/unblock', [UserController::class, 'unblock']);
                 Route::post('/primary', [UserController::class, 'primary']);
             });
     });

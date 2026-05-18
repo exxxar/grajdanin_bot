@@ -123,6 +123,7 @@ import {useUsersStore} from "@/stores/users";
 import {useMunicipalitiesStore} from "@/stores/useMunicipalitiesStore";
 import {useIssueCategoriesStore} from "@/stores/useIssueCategoriesStore";
 import {useEventRequestsStore} from "@/stores/reports/useEventRequestsStore";
+import {useAuthStore} from "@/stores/auth.js";
 
 export default {
     name: "EventRequestForm",
@@ -130,7 +131,7 @@ export default {
     data() {
         return {
             helpStore: useHelpFormatsStore(),
-            userStore: useUsersStore(),
+            userStore: useAuthStore(),
             municipalityStore: useMunicipalitiesStore(),
             issueStore: useIssueCategoriesStore(),
             eventRequestStore: useEventRequestsStore(),
@@ -148,7 +149,7 @@ export default {
     },
     computed: {
         user() {
-            return this.userStore?.self || null
+            return this.userStore?.user || null
         },
         hasAvailableHelpFormats() {
             return this.helpStore.items.length > this.form.help_formats.length

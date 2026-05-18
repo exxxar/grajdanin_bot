@@ -60,6 +60,7 @@ import PrimaryForm from "@/Components/Users/Forms/PrimaryForm.vue";
 
 
         <div class="offcanvas-body">
+<!--
             <UserProfileCard
                 v-if="userStore.self"
                 :user="userStore.self"></UserProfileCard>
@@ -73,6 +74,7 @@ import PrimaryForm from "@/Components/Users/Forms/PrimaryForm.vue";
                 > Главное меню</a></li>
 
             </ul>
+-->
 
 
         </div>
@@ -87,10 +89,10 @@ import PrimaryForm from "@/Components/Users/Forms/PrimaryForm.vue";
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <PrimaryForm
+<!--                    <PrimaryForm
                         v-if="userStore.self"
                         v-on:callback="result"
-                        :initial-data="userStore.self"></PrimaryForm>
+                        :initial-data="userStore.self"></PrimaryForm>-->
                 </div>
             </div>
         </div>
@@ -98,59 +100,37 @@ import PrimaryForm from "@/Components/Users/Forms/PrimaryForm.vue";
 
 </template>
 <script>
-import {useUsersStore} from "@/stores/users";
+import {useAuthStore} from "@/stores/auth.js";
 
 export default {
     data() {
         return {
-            userStore: useUsersStore(),
+            authStore: useAuthStore(),
             currentTheme: '',
             themes: []
         }
     },
     watch: {},
     created() {
-        this.userStore.fetchSelf().then(() => {
-           /* if (!this.userStore.self.registration_at && this.userStore.self.role > 0)
-                new bootstrap.Modal(document.getElementById('primaryUserModal')).show()*/
+        this.authStore.init().then(() => {
+           window.self = this.authStore.user
         })
     },
     computed: {
-        tg() {
-            return window.Telegram.WebApp;
-        },
         self() {
-            return window.botUser || null
+            return window.self || null
         },
-
     },
 
     mounted() {
-        this.tg.expand()
 
-        this.tg.BackButton.hide()
     },
     methods: {
-        result() {
-            const modal = bootstrap.Modal.getInstance(document.getElementById('primaryUserModal'))
-            if (modal)
-                modal.hide()
-        },
-        goTo(name) {
-            this.$router.push({name: name})
-        },
 
         scrollTop() {
             window.scrollTo(0, 80);
         },
-        openLink(url) {
-            this.tg.openLink(url, {
-                try_instant_view: true
-            })
-        },
-        closeShop() {
-            this.tg.close()
-        },
+
 
     },
 

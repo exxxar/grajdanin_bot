@@ -306,6 +306,7 @@ import {useIssueCategoriesStore} from "@/stores/useIssueCategoriesStore";
 import {useUsersStore} from "@/stores/users";
 import {useHelpFormatsStore} from "@/stores/useHelpFormatsStore";
 import {useIncomingReportsStore} from "@/stores/reports/useIncomingReportsStore";
+import {useAuthStore} from "@/stores/auth.js";
 
 export default {
     name: "ReportForm",
@@ -319,7 +320,7 @@ export default {
             mediaRecorder: null,
             audioChunks: [],
             helpStore: useHelpFormatsStore(),
-            userStore: useUsersStore(),
+            userStore: useAuthStore(),
             municipalityStore: useMunicipalitiesStore(),
             issueStore: useIssueCategoriesStore(),
             incomingReport: useIncomingReportsStore(),
@@ -354,7 +355,7 @@ export default {
             return this.helpStore.items.length > this.form.help_formats.length
         },
         user() {
-            return this.userStore?.self || null
+            return this.userStore?.user || null
         },
         problems() {
             return this.issueStore.items?.filter(item => item?.type === 0)

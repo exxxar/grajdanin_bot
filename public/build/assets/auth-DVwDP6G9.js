@@ -1,0 +1,1 @@
+import{K as e,O as a}from"./app-edteFx3c.js";const i=e("auth",{state:()=>({user:null,token:null}),actions:{async init(){const t=await a.post("/api/auth/init");this.user=t.data.user,this.token=t.data.token,a.defaults.headers.common.Authorization=`Bearer ${this.token}`},async upgrade(t){const s=await a.post("/api/auth/upgrade",t);this.user=s.data.user}}});export{i as u};

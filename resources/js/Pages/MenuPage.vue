@@ -31,20 +31,17 @@ const { t } = useI18n();
 
 </template>
 <script>
-import {useUsersStore} from "@/stores/users";
+import {useAuthStore} from "@/stores/auth.js";
 
 export default {
     data() {
         return {
-            userStore: useUsersStore()
+            authStore: useAuthStore()
         }
     },
     computed: {
-        tg() {
-            return window.Telegram.WebApp;
-        },
         user() {
-            return this.userStore.self || null
+            return this.authStore.user || null
         },
     },
     methods: {}

@@ -10,12 +10,13 @@ use Symfony\Component\HttpFoundation\Response;
 class CheckRole
 {
     protected $rolesHierarchy = [
-        'user' => 0,
-        'agent' => 1,
-        'supplier' => 2,
-        'admin' => 3,
-        'superadmin' => 4,
-        'super' => 4,
+        'guest' => 0,
+        'user' =>1,
+        'agent' => 2,
+        'supplier' => 3,
+        'admin' => 4,
+        'superadmin' => 5,
+        'super' => 5
     ];
 
     public function handle(Request $request, Closure $next, $role = null)

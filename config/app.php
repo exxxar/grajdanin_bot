@@ -170,8 +170,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\BusinessLogicServiceProvider::class,
-        Telegram\Bot\Laravel\TelegramServiceProvider::class,
-        BotManagerServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
 
     ])->toArray(),
@@ -188,10 +186,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        'BotManager' => \App\Facades\BotManager::class,
-        'BotMethods' => \App\Facades\BotMethods::class,
         'StartCodesService' => \App\Facades\StartCodesService::class,
-        'Telegram' => Telegram\Bot\Laravel\Facades\Telegram::class,
         'BusinessLogic' => App\Facades\BusinessLogicFacade::class,
         'PDF' => Barryvdh\DomPDF\Facade\Pdf::class,
         // 'Example' => App\Facades\Example::class,
