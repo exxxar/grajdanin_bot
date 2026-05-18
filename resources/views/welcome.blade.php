@@ -680,7 +680,7 @@
                         <div class="phone-screen">
 
                             <!-- ВСТРОЕННОЕ PWA -->
-                            <iframe src="{{env("APP_URL")."/app"}}"></iframe>
+                            <iframe src="/app"></iframe>
 
                         </div>
                     </div>
