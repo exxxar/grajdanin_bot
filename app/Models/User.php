@@ -25,6 +25,7 @@ class User extends Authenticatable
         'uuid',
         'email',
         'password',
+        'personal_info',
         "role",
         "email_verified_at",
         "password",
@@ -53,17 +54,15 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'personal_info' => 'array',
         'password' => 'hashed',
     ];
 
-    public function getUserTelegramLink(): string
-    {
-        return "\n<a href='tg://user?id=" . $this->telegram_chat_id . "'>Перейти к чату с пользователем</a>";
-    }
 
     public function getRoleName(): string
     {
         $roles = [
+            'Гость',
             'Пользователь',
             'Волонтер',
             'Должностное лицо',
@@ -79,8 +78,8 @@ class User extends Authenticatable
         $fields = [
             'Имя' => $this->name,
             'Email' => $this->email,
-            'ФИО из Telegram' => $this->fio_from_telegram,
-            'ID чата Telegram' => $this->telegram_chat_id,
+            'Телефон' => $this->phone ?? '-',
+            'Персональная информация' => $this->personal_info ?? '-',
             'Роль' => $this->getRoleName(),
             'Email подтверждён' => $this->email_verified_at,
             'Дата заполнения профиля' => $this->registration_at ?? 'не заполнен',

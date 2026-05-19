@@ -1,6 +1,7 @@
 <template>
-    <form @submit="handleSubmit" class="p-3 border rounded">
+    <form @submit="handleSubmit" class="card rounded-2">
 
+        <div class="card-body">
         <!-- Прогресс -->
         <div class="my-3">
             <div class="progress">
@@ -386,7 +387,7 @@
             </div>
         </nav>
 
-
+        </div>
     </form>
 </template>
 

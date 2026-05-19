@@ -7,6 +7,10 @@ const MenuPage = defineAsyncComponent(() => import('../Pages/MenuPage.vue'))
 const HelpPage = defineAsyncComponent(() => import('../Pages/HelpPage.vue'))
 const UserPage = defineAsyncComponent(() => import('../Pages/AdminPages/UserPage.vue'))
 const ExcelExportPage = defineAsyncComponent(() => import('../Pages/AdminPages/ExcelExportPage.vue'))
+const ChatPage = defineAsyncComponent(() => import('../Pages/ChatPage.vue'))
+const AuthPage = defineAsyncComponent(() => import('../Pages/AuthPage.vue'))
+const ProfilePage = defineAsyncComponent(() => import('../Pages/ProfilePage.vue'))
+const ReportsPage = defineAsyncComponent(() => import('../Pages/ReportsPage.vue'))
 
 const BlockedPage = defineAsyncComponent(() => import('../Pages/BlockedPage.vue'))
 
@@ -17,11 +21,39 @@ const ReportPage = defineAsyncComponent(() => import('../Pages/AdminPages/Report
 const VolunteerPage = defineAsyncComponent(() => import('../Pages/AdminPages/VolunteerPage.vue'))
 const HelpsPage = defineAsyncComponent(() => import('../Pages/AdminPages/HelpsPage.vue'))
 
+
 const routes = [
+    {
+        path: '/auth',
+        name: 'AuthPage',
+        component: AuthPage,
+        meta: {
+            hide_menu: true,
+        }
+
+    },
+    {
+        path: '/profile',
+        name: 'ProfilePage',
+        component: ProfilePage,
+    },
     {
         path: '/helps',
         name: 'HelpsPage',
         component: HelpsPage,
+    },
+    {
+        path: '/reports',
+        name: 'ReportsPage',
+        component: ReportsPage,
+    },
+    {
+        path: '/chat',
+        name: 'ChatPage',
+        component: ChatPage,
+        meta: {
+            hide_menu: true,
+        }
     },
     {
         path: '/issues',

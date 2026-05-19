@@ -2,6 +2,7 @@
 import IncomingReportForm from "@/Components/Reports/Forms/IncomingReportForm.vue";
 import EventRequestForm from "@/Components/Reports/Forms/EventRequestForm.vue";
 import VolunteerForm from "@/Components/Volunteers/VolunteerForm.vue";
+import CardSlider from "@/Components/Slider/CardSlider.vue";
 </script>
 
 <template>
@@ -9,6 +10,16 @@ import VolunteerForm from "@/Components/Volunteers/VolunteerForm.vue";
     <template v-if="tab==='main'">
 
         <div class="row g-2">
+<!--            <div class="col-12">
+                <CardSlider :items="cards">
+                    <template #card="{ card }">
+                        <div class="card-inner">
+                            <img :src="card.image" class="card-img" />
+                            <div class="title">{{ card.title }}</div>
+                        </div>
+                    </template>
+                </CardSlider>
+            </div>-->
             <div class="col-md-4">
                 <div class="card h-100 menu-card rounded-4"
                      @click="tab='incoming-request'">
@@ -25,6 +36,7 @@ import VolunteerForm from "@/Components/Volunteers/VolunteerForm.vue";
                     </div>
                 </div>
             </div>
+
 
             <div class="col-md-4">
                 <div class="card h-100 menu-card rounded-4"
@@ -93,6 +105,12 @@ export default {
         data(){
           return {
               tab:"main",
+              cards: [
+                  { title: 'Первая', image: '/screenshots/grajdanin-mobile.png' },
+                  { title: 'Вторая', image: '/images/2.jpg' },
+                  { title: 'Третья', image: '/images/3.jpg' },
+                  { title: 'Четвёртая', image: '/images/4.jpg' }
+              ]
           }
         },
         methods:{

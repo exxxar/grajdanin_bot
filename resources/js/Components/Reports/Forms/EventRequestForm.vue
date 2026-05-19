@@ -5,81 +5,82 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
 </script>
 
 <template>
-    <form class="p-3" @submit.prevent="submitForm">
+    <form @submit.prevent="submitForm" class="card rounded-2">
 
-        <h5 class="mb-2">Заявка на мероприятие</h5>
+        <div class="card-body">
+            <h5 class="mb-2">Заявка на мероприятие</h5>
 
-        <template v-if="user.role === 0">
+
+                <div class="form-floating mb-2">
+                    <input type="text" class="form-control" v-model="form.received_from" required>
+                    <label>От кого (ФИО)</label>
+                </div>
+
+                <div class="form-floating mb-2">
+                    <input type="text"
+                           v-mask="'+7(###) ###-##-##'"
+                           class="form-control" v-model="form.phone" required>
+                    <label>Номер телефона</label>
+                </div>
+
+
             <div class="form-floating mb-2">
-                <input type="text" class="form-control" v-model="form.received_from" required>
-                <label>От кого (ФИО)</label>
+                <select class="form-select" v-model="form.municipality_id" required>
+                    <option v-for="m in municipalityStore.items" :key="m.id" :value="m.id">
+                        {{ m.name }}
+                    </option>
+                </select>
+                <label>Муниципалитет</label>
             </div>
 
+
+
+            <!-- EVENT DATE -->
             <div class="form-floating mb-2">
-                <input type="text"
-                       v-mask="'+7(###) ###-##-##'"
-                       class="form-control" v-model="form.phone" required>
-                <label>Номер телефона</label>
+                <input type="date" class="form-control" v-model="form.event_date">
+                <label>Дата мероприятия</label>
             </div>
-        </template>
 
-        <div class="form-floating mb-2">
-            <select class="form-select" v-model="form.municipality_id" required>
-                <option v-for="m in municipalityStore.items" :key="m.id" :value="m.id">
-                    {{ m.name }}
-                </option>
-            </select>
-            <label>Муниципалитет</label>
-        </div>
+            <!-- DESCRIPTION -->
+            <div class="form-floating mb-2">
+                <textarea class="form-control" style="height: 120px" v-model="form.description"></textarea>
+                <label>Описание мероприятия</label>
+            </div>
 
+            <!-- TARGET AUDIENCE -->
+            <div class="form-floating mb-2">
+                <input type="text" class="form-control" v-model="form.target_audience">
+                <label>Целевая аудитория</label>
+            </div>
 
+            <!-- PARTICIPANTS COUNT -->
+            <div class="form-floating mb-2">
+                <input type="number" class="form-control" v-model="form.participants_count">
+                <label>Количество участников</label>
+            </div>
 
-        <!-- EVENT DATE -->
-        <div class="form-floating mb-2">
-            <input type="date" class="form-control" v-model="form.event_date">
-            <label>Дата мероприятия</label>
-        </div>
+            <div class="mb-2">
+                <label class="form-label small">Форматы помощи</label>
 
-        <!-- DESCRIPTION -->
-        <div class="form-floating mb-2">
-            <textarea class="form-control" style="height: 120px" v-model="form.description"></textarea>
-            <label>Описание мероприятия</label>
-        </div>
-
-        <!-- TARGET AUDIENCE -->
-        <div class="form-floating mb-2">
-            <input type="text" class="form-control" v-model="form.target_audience">
-            <label>Целевая аудитория</label>
-        </div>
-
-        <!-- PARTICIPANTS COUNT -->
-        <div class="form-floating mb-2">
-            <input type="number" class="form-control" v-model="form.participants_count">
-            <label>Количество участников</label>
-        </div>
-
-        <div class="mb-2">
-            <label class="form-label small">Форматы помощи</label>
-
-            <template v-for="(item, index) in form.help_formats" :key="index">
-                <div class="input-group flex-nowrap mb-2">
-                    <div class="form-floating">
-                        <select
-                            class="form-select"
-                            v-model="form.help_formats[index]"
-                        >
-                            <option
-                                v-for="hf in availableHelpFormats(index)"
-                                :key="hf.id"
-                                :value="hf.id"
+                <template v-for="(item, index) in form.help_formats" :key="index">
+                    <div class="input-group flex-nowrap mb-2">
+                        <div class="form-floating">
+                            <select
+                                class="form-select"
+                                v-model="form.help_formats[index]"
                             >
-                                {{ hf.name }}
-                            </option>
-                        </select>
-                        <label>Формат помощи #{{ index + 1 }}</label>
-                    </div>
+                                <option
+                                    v-for="hf in availableHelpFormats(index)"
+                                    :key="hf.id"
+                                    :value="hf.id"
+                                >
+                                    {{ hf.name }}
+                                </option>
+                            </select>
+                            <label>Формат помощи #{{ index + 1 }}</label>
+                        </div>
 
-                    <span class="input-group-text">
+                        <span class="input-group-text">
             <button
                 type="button"
                 class="btn btn-outline-danger btn-sm w-100"
@@ -88,32 +89,34 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
                 ×
             </button>
         </span>
-                </div>
-            </template>
+                    </div>
+                </template>
 
 
-            <button type="button"
-                    class="btn btn-outline-primary w-100 p-3"
-                    @click="addHelpFormat"
-                    :disabled="!hasAvailableHelpFormats">
-                Добавить формат помощи
-            </button>
+                <button type="button"
+                        class="btn btn-outline-primary w-100 p-2 rounded-4"
+                        @click="addHelpFormat"
+                        :disabled="!hasAvailableHelpFormats">
+                    Добавить формат помощи
+                </button>
+            </div>
+
+            <!-- COMMENT -->
+            <div class="form-floating mb-2">
+                <textarea class="form-control" style="height: 100px" v-model="form.comment"></textarea>
+                <label>Комментарий</label>
+            </div>
+
+            <FileUploader v-model="form.documents"></FileUploader>
+
+
+            <AudioRecorder v-model="form.audio_files"></AudioRecorder>
+
+            <button
+                type="submit"
+                class="btn btn-primary w-100 p-3">Отправить</button>
         </div>
 
-        <!-- COMMENT -->
-        <div class="form-floating mb-2">
-            <textarea class="form-control" style="height: 100px" v-model="form.comment"></textarea>
-            <label>Комментарий</label>
-        </div>
-
-        <FileUploader v-model="form.documents"></FileUploader>
-
-
-        <AudioRecorder v-model="form.audio_files"></AudioRecorder>
-
-        <button
-            type="submit"
-            class="btn btn-primary w-100 p-3">Отправить</button>
     </form>
 </template>
 

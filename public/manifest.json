@@ -1,7 +1,7 @@
 {
     "id": "gajdanin-pwa",
-    "name": "Гражданин",
-    "short_name": "grajdanin",
+    "name": "Гражданин | Новые люди",
+    "short_name": "Гражданин",
     "start_url": "/app?source=pwa",
     "scope": "/app",
     "display": "standalone",

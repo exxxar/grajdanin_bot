@@ -1,100 +1,50 @@
 <template>
-    <div class="card border-light border-2">
-        <div class="card-body d-flex justify-content-center flex-column align-items-center">
+    <div class="card shadow-sm border-0">
+        <div class="card-body d-flex align-items-center gap-3">
 
-            <!-- Имя -->
-            <h5
-                @click="minimize=!minimize"
-                class="card-title mb-0 text-decoration-underline link-underline-primary">{{ user.name }}</h5>
+            <div class="avatar bg-primary text-white rounded-circle d-flex justify-content-center align-items-center"
+                 style="width: 48px; height: 48px;">
+                <i class="fa-solid fa-user"></i>
+            </div>
 
-            <p class="mb-1 fst-italic small text-primary fw-bold">
-                {{ roleLabel(user.role) }}
-            </p>
-
-            <template v-if="!minimize">
-
-                <p class="text-muted mb-0">{{ user.fio_from_telegram || '—' }}</p>
-
-<!--                &lt;!&ndash; Email &ndash;&gt;
-                <p class="mb-1">
-                    {{ user.email }}
-                </p>-->
-
-                <!-- Telegram -->
-                <p class="mb-1" v-if="user.telegram_chat_id">
-                    {{ user.telegram_chat_id }}
-                </p>
-
-
-                <template v-if="user.role>=3">
-                    <!-- Процент -->
-                    <p class="mb-1">
-                        Админский {{ user.percent }} %
-                    </p>
-
-                    <div
-                        class="form-check form-switch ">
-                        <input
-                            @change="changeAdminWorkStatus(user)"
-                            class="form-check-input"
-                            type="checkbox"
-                            v-model="user.is_work"
-                            :id="`is-work-${user.id}`"
-                        />
-                        <label class="form-check-label" :for="`is-work-${user.id}`">
-                            {{ user.is_work ? 'за работай' : 'не работаю' }}
-                        </label>
-                    </div>
-                </template>
-
-
-
-<!--                &lt;!&ndash; Кнопка редактирования &ndash;&gt;
-                <div class="mt-3">
-                    <a :href="`/users/${user.id}/edit`" class="btn btn-outline-primary btn-sm">
-                        Редактировать
-                    </a>
-                </div>-->
-            </template>
+            <div
+                @click="goTo('ProfilePage')"
+                v-if="user.role>0">
+                <div class="fw-bold">{{ user.name ?? 'Имя не указано' }}</div>
+                <div class="text-muted" style="font-size:12px;">{{ user.phone }}</div>
+                <div class="text-muted" style="font-size:12px;">{{ roles[user.role] }}</div>
+            </div>
+            <div v-else>
+                <p
+                    @click="goTo('AuthPage')"
+                    class="mb-0" style="line-height: 100%;">Войдите в систему</p>
+            </div>
 
         </div>
     </div>
 </template>
 
 <script>
-import {useUsersStore} from "@/stores/users";
-
 export default {
     name: 'UserProfileCard',
-    data() {
-        return {
-            userStore: useUsersStore(),
-            minimize: true
-        }
-    },
     props: {
-        user: {
-            type: Object,
-            required: true
-        }
+        user: Object
     },
-    mounted() {
-        console.log("user in usercard", this.user)
+    data(){
+      return {
+          roles:[
+              "Гость", "Пользователь", "Волонтер", "Официальное лицо", "Администратор", "Суперадмин"
+          ]
+      }
     },
-    methods: {
-        async changeAdminWorkStatus(user) {
-            await this.userStore.updateWorkStatus(user.id, user.is_work)
+    methods:{
+        goTo(routeName) {
+            const el = document.getElementById('sidebar-menu')
+            const sidebar = bootstrap.Offcanvas.getOrCreateInstance(el)
+            sidebar.hide()
+
+            this.$router.push({ name: routeName })
         },
-        roleLabel(role) {
-            const roles = {
-                0: 'Пользователь',
-                1: 'Младший администратор',
-                2: 'Поставщик',
-                3: 'Администратор',
-                4: 'Суперадмин'
-            }
-            return roles[role] || 'Неизвестно'
-        }
     }
 }
 </script>

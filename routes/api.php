@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MessageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,14 +16,39 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
 
 Route::post('/auth/init', [AuthController::class, 'guest']);
-Route::middleware('auth:sanctum')
-    ->post('/auth/upgrade', [AuthController::class, 'upgrade']);
+
+// Гостевая авторизация (создание или восстановление гостя)
+Route::post('/auth/guest', [AuthController::class, 'guest']);
+
+// Классический вход
+Route::post('/auth/login', [AuthController::class, 'login']);
+
+// Выход
+Route::post('/auth/logout', [AuthController::class, 'logout'])
+    ->middleware('auth:sanctum');
+
+
+Route::post('/auth/upgrade', [AuthController::class, 'upgrade'])
+    ->middleware('auth:sanctum');
+
+// Получить текущего пользователя
+Route::get('/auth/me', [AuthController::class, 'me'])
+    ->middleware('auth:sanctum');
+
+
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/messages/{report}', [MessageController::class, 'index']);
+    Route::post('/messages', [MessageController::class, 'store']);
+    Route::get('/chats', [MessageController::class, 'userChats']);
+    Route::get('/chat/{chatId}/messages', [MessageController::class, 'chatMessages']);
+    Route::get('/message/{message}', [MessageController::class, 'show']);
+    Route::delete('/message/{message}', [MessageController::class, 'destroy']);
+});
 
 
 

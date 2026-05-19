@@ -10,25 +10,7 @@ import Layout from "@/Layouts/Layout.vue";
 
             <router-view/>
 
-            <div class="bottom-nav shadow-lg">
-                <button class="nav-item active">
-                    <i class="fa-solid fa-house"></i>
-                    <span>Главная</span>
-                </button>
 
-                <button class="nav-item">
-                    <i class="fa-solid fa-list-check"></i>
-                </button>
-
-                <button class="nav-item">
-                    <i class="fa-solid fa-plus"></i>
-                </button>
-
-                <button class="nav-item">
-                    <i class="fa-solid fa-user"></i>
-                </button>
-
-            </div>
 
         </template>
 

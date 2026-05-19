@@ -27,7 +27,7 @@
 
         </div>
 
-        <div class="col mb-0 mt-0">
+        <div class="col mb-0 mt-0 p-1">
             <div
                 data-bs-toggle="modal" data-bs-target="#choose-modal"
                 @click="selectIssueCategory(null)"
