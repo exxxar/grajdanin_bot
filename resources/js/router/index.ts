@@ -66,7 +66,7 @@ const routes = [
         component: MunicipalityPage,
     },
     {
-        path: '/reports',
+        path: '/admin/reports',
         name: 'ReportPage',
         component: ReportPage,
     },

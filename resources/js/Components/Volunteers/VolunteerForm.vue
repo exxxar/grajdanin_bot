@@ -362,7 +362,7 @@
 
 
         <nav style="position: sticky; bottom:20px;z-index: 100;">
-            <div class="btn-group w-100" role="group" aria-label="Basic example">
+            <div class="btn-group w-100" role="group" aria-label="Навигация по шагам">
                 <template v-if="step>1&&step<=5">
                     <button type="button"
                             @click="step--"

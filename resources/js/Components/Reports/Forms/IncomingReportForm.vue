@@ -73,8 +73,8 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
 
 
                 <div class="form-floating mb-2">
-                    <textarea class="form-control" style="height: 120px" v-model="form.problem_description"></textarea>
-                    <label>Особенности проблемы</label>
+                    <textarea class="form-control" style="height: 120px" v-model="form.problem_description" required minlength="10"></textarea>
+                    <label>Особенности проблемы *</label>
                 </div>
 
                 <div class="mb-2">
@@ -183,7 +183,7 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
                             </li>
 
                             <!-- Проблемы -->
-                            <li class="list-group-item" v-if="form.problems.length">
+                            <li class="list-group-item" v-if="hasIssueSelections(form.problems)">
                                 <strong>Проблемы:</strong>
                                 <ul class="mt-1">
                                     <template v-for="(item, i) in form.problems">
@@ -195,11 +195,11 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
 
                                 </ul>
                             </li>
-                            <div class="p-2" v-else>
+                            <li class="list-group-item" v-else>
                                 <p class="alert alert-info mb-0">
-                                    Проблемы не указаны текстом
+                                    Проблемы не указаны
                                 </p>
-                            </div>
+                            </li>
 
                             <!-- Описание проблемы -->
                             <li class="list-group-item" v-if="form.problem_description">
@@ -211,7 +211,7 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
 
 
                             <!-- Решения -->
-                            <li class="list-group-item" v-if="form.solutions.length">
+                            <li class="list-group-item" v-if="hasIssueSelections(form.solutions)">
                                 <strong>Предложенные решения:</strong>
                                 <ul class="mt-1">
                                     <template v-for="(item, i) in form.solutions">
@@ -222,15 +222,15 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
                                     </template>
                                 </ul>
                             </li>
-                            <div class="p-2" v-else>
+                            <li class="list-group-item" v-else>
                                 <p class="alert alert-info mb-0">
-                                    Предложений ро решению проблемы не поступило
+                                    Предложений по решению проблемы не поступило
                                 </p>
-                            </div>
+                            </li>
 
 
                             <!-- Трудности -->
-                            <li class="list-group-item" v-if="form.difficulties.length">
+                            <li class="list-group-item" v-if="hasIssueSelections(form.difficulties)">
                                 <strong>Трудности:</strong>
                                 <ul class="mt-1">
                                     <template v-for="(item, i) in form.difficulties">
@@ -242,11 +242,11 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
                                 </ul>
                             </li>
 
-                            <div class="p-2" v-else>
+                            <li class="list-group-item" v-else>
                                 <p class="alert alert-info mb-0">
                                     Трудностей реализации не обнаружено
                                 </p>
-                            </div>
+                            </li>
 
                             <!-- Форматы помощи -->
                             <li class="list-group-item" v-if="form.help_formats.length">
@@ -274,7 +274,7 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
             </template>
 
             <nav style="position: sticky; bottom:20px;z-index: 100;">
-                <div class="btn-group w-100" role="group" aria-label="Basic example">
+                <div class="btn-group w-100" role="group" aria-label="Навигация по шагам">
                     <template v-if="step>1&&step<6">
                         <button type="button"
                                 @click="goBack"
@@ -292,7 +292,10 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
 
                     <template v-if="step===6">
                         <button
-                            type="submit" class="btn btn-primary p-3">Отправить
+                            type="submit"
+                            class="btn btn-primary p-3"
+                            :disabled="submitting">
+                            {{ submitting ? 'Отправка...' : 'Отправить' }}
                         </button>
                     </template>
 
@@ -309,6 +312,7 @@ import {useUsersStore} from "@/stores/users";
 import {useHelpFormatsStore} from "@/stores/useHelpFormatsStore";
 import {useIncomingReportsStore} from "@/stores/reports/useIncomingReportsStore";
 import {useAuthStore} from "@/stores/auth.js";
+import {useAlertStore} from "@/stores/utillites/useAlertStore";
 
 export default {
     name: "ReportForm",
@@ -318,9 +322,11 @@ export default {
         return {
             step: 1,
             maxStep: 6,
+            submitting: false,
             isRecording: false,
             mediaRecorder: null,
             audioChunks: [],
+            alertStore: useAlertStore(),
             helpStore: useHelpFormatsStore(),
             userStore: useAuthStore(),
             municipalityStore: useMunicipalitiesStore(),
@@ -329,7 +335,7 @@ export default {
             selected_problem: null,
             form: {
                 type: 0,
-                phone: null,
+                phone: "",
                 from_user_id: "",
                 to_user_id: "",
                 municipality_id: "",
@@ -337,11 +343,11 @@ export default {
                 documents: [],
                 received_from: "",
                 problem_description: "",
-                help_formats: [""],
+                help_formats: [],
                 comment: "",
-                problems: [],
-                solutions: [],
-                difficulties: [],
+                problems: {},
+                solutions: {},
+                difficulties: {},
                 audio_files: []
             },
 
@@ -385,14 +391,123 @@ export default {
         this.form.received_at = formatted;
     },
     methods: {
+        isGuest() {
+            return (this.user?.role ?? 0) === 0
+        },
+
+        nextStep() {
+            if (this.isGuest() && this.step === 2) {
+                this.step = 5
+                return
+            }
+            this.step++
+        },
+
         goBack() {
-            if (this.user.role > 0) {
+            if (!this.isGuest()) {
                 this.step--
                 return
             }
 
-            this.step = this.step - 1 === 4 || this.step - 1 === 3 ? 2 : this.step - 1
+            if (this.step === 5) {
+                this.step = 2
+                return
+            }
 
+            this.step--
+        },
+
+        hasIssueSelections(value) {
+            if (!value || typeof value !== 'object') {
+                return false
+            }
+
+            return Object.values(value).some(
+                (items) => Array.isArray(items) && items.filter(Boolean).length > 0
+            )
+        },
+
+        validateStep() {
+            switch (this.step) {
+                case 1:
+                    if (!this.form.received_from?.trim()) {
+                        this.alertStore.show('Укажите ФИО заявителя.')
+                        return false
+                    }
+                    if (!this.normalizePhone(this.form.phone)) {
+                        this.alertStore.show('Укажите корректный номер телефона.')
+                        return false
+                    }
+                    if (!this.form.municipality_id) {
+                        this.alertStore.show('Выберите муниципалитет.')
+                        return false
+                    }
+                    return true
+                case 5:
+                    if (!this.form.problem_description?.trim() || this.form.problem_description.trim().length < 10) {
+                        this.alertStore.show('Опишите проблему не короче 10 символов.')
+                        return false
+                    }
+                    if (!this.form.received_at) {
+                        this.alertStore.show('Укажите дату получения обращения.')
+                        return false
+                    }
+                    return true
+                default:
+                    return true
+            }
+        },
+
+        normalizePhone(phone) {
+            const digits = String(phone || '').replace(/\D/g, '')
+
+            if (digits.length === 11 && digits.startsWith('7')) {
+                return '+' + digits
+            }
+
+            if (digits.length === 10) {
+                return '+7' + digits
+            }
+
+            return null
+        },
+
+        buildFormData() {
+            const fd = new FormData()
+
+            fd.append('type', String(this.form.type ?? 0))
+            fd.append('received_from', this.form.received_from.trim())
+            fd.append('phone', this.normalizePhone(this.form.phone))
+            fd.append('municipality_id', String(this.form.municipality_id))
+            fd.append('received_at', this.form.received_at)
+            fd.append('problem_description', this.form.problem_description.trim())
+
+            if (this.form.comment?.trim()) {
+                fd.append('comment', this.form.comment.trim())
+            }
+
+            const helpFormats = this.form.help_formats.filter(Boolean)
+            fd.append('help_formats', JSON.stringify(helpFormats))
+            fd.append('problems', JSON.stringify(this.form.problems || {}))
+
+            if (!this.isGuest()) {
+                fd.append('solutions', JSON.stringify(this.form.solutions || {}))
+                fd.append('difficulties', JSON.stringify(this.form.difficulties || {}))
+            }
+
+            this.form.documents.forEach((file, index) => {
+                fd.append(`documents[${index}]`, file)
+            })
+
+            this.form.audio_files.forEach((item, index) => {
+                const blob = item.file || item
+                const file = blob instanceof Blob
+                    ? new File([blob], `audio-${index}.webm`, { type: blob.type || 'audio/webm' })
+                    : blob
+                fd.append(`audio_files[${index}]`, file)
+            })
+
+            return fd
         },
 
         availableHelpFormats(index) {
@@ -417,17 +532,39 @@ export default {
         },
 
 
-        submitForm() {
-            this.step++;
-            if (this.step <6)
-                return;
-            // Здесь отправка формы
-            console.log("FORM DATA:", this.form);
+        async submitForm() {
+            if (!this.validateStep()) {
+                return
+            }
 
-            this.incomingReport.createIncomingPdfReport(this.form)
+            if (this.step < 6) {
+                this.nextStep()
+                return
+            }
 
-            this.$emit("success")
+            if (!this.user) {
+                this.alertStore.show('Не удалось определить пользователя. Обновите страницу.')
+                return
+            }
 
+            this.submitting = true
+
+            try {
+                const formData = this.buildFormData()
+                const result = await this.incomingReport.createFromForm(formData)
+
+                this.alertStore.show('Заявка успешно отправлена', 'success')
+                this.$emit('success', result)
+
+                if (result.report_id) {
+                    this.$router.push({
+                        name: 'ChatPage',
+                        query: { report: result.report_id },
+                    })
+                }
+            } finally {
+                this.submitting = false
+            }
         }
     }
 };

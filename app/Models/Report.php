@@ -11,33 +11,25 @@ class Report extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'report_type',
+        'type',
+        'priority',
         'from_user_id',
         'to_user_id',
-        'priority',
         'municipality_id',
         'received_at',
+        'phone',
         'documents',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
             'id' => 'integer',
+            'type' => 'integer',
+            'priority' => 'integer',
             'from_user_id' => 'integer',
             'to_user_id' => 'integer',
-            'priority' => 'integer',
             'municipality_id' => 'integer',
             'documents' => 'array',
         ];
@@ -50,16 +42,21 @@ class Report extends Model
 
     public function fromUser(): BelongsTo
     {
-        return $this->belongsTo(Users::class);
+        return $this->belongsTo(User::class, 'from_user_id');
     }
 
     public function toUser(): BelongsTo
     {
-        return $this->belongsTo(Users::class);
+        return $this->belongsTo(User::class, 'to_user_id');
     }
 
-    public function userIncomingReportResultReportEventRequest(): HasOne
+    public function incomingReport(): HasOne
     {
-        return $this->hasOne(UserIncomingReportResultReportEventRequest::class);
+        return $this->hasOne(IncomingReport::class);
+    }
+
+    public function chat(): HasOne
+    {
+        return $this->hasOne(Chat::class);
     }
 }

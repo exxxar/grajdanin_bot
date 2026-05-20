@@ -36,5 +36,8 @@ return [
         'redirect' => env('YANDEX_REDIRECT_URI'),
     ],
 
+    'crm' => [
+        'webhook_url' => env('CRM_WEBHOOK_URL'),
+    ],
 
 ];

@@ -47,7 +47,7 @@ class UsersTableSeeder extends Seeder
 
         DB::table('users')->insert([
             'name' => "СуперАдмин",
-            'email' => 'test@example.com',
+            'email' => 'test@guest.local',
             'uuid' => Str::uuid(),
             'role' => 0,
             'email_verified_at' => now(),
@@ -60,7 +60,7 @@ class UsersTableSeeder extends Seeder
         foreach ($people as $p)
             DB::table('users')->insert([
                 'name' => $p,
-                'email' => Str::uuid() . '@example.com',
+                'email' => Str::uuid() . '@guest.local',
                 'uuid' => Str::uuid(),
                 'role' => 2,
                 'email_verified_at' => now(),

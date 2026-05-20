@@ -51,9 +51,12 @@ class PdfController extends Controller
         $content = $pdf->output();//'event_' . $validated['event_date'] . '.pdf');
         // Или: return $pdf->stream('event-report.pdf');
 
-        \App\Facades\BotMethods::bot()
-            ->sendDocument(env("TELEGRAM_ADMIN_CHANNEL"),"Проблема",
-                \Telegram\Bot\FileUpload\InputFile::createFromContents($content,"проблема.pdf"));
+        // Артефакт Telegram: раньше PDF уходил в админ-канал. Логика приложения на этом не держится.
+        // if (env('TELEGRAM_ADMIN_CHANNEL')) {
+        //     \App\Facades\BotMethods::bot()
+        //         ->sendDocument(env('TELEGRAM_ADMIN_CHANNEL'), 'Проблема',
+        //             \Telegram\Bot\FileUpload\InputFile::createFromContents($content, 'проблема.pdf'));
+        // }
 
         return response()->noContent();
     }
@@ -86,9 +89,11 @@ class PdfController extends Controller
          $content = $pdf->output();//'event_' . $validated['event_date'] . '.pdf');
         // Или: return $pdf->stream('event-report.pdf');
 
-        \App\Facades\BotMethods::bot()
-            ->sendDocument(env("TELEGRAM_ADMIN_CHANNEL"),"Мероприятие",
-                \Telegram\Bot\FileUpload\InputFile::createFromContents($content,"проведение мероприятия.pdf"));
+        // if (env('TELEGRAM_ADMIN_CHANNEL')) {
+        //     \App\Facades\BotMethods::bot()
+        //         ->sendDocument(env('TELEGRAM_ADMIN_CHANNEL'), 'Мероприятие',
+        //             \Telegram\Bot\FileUpload\InputFile::createFromContents($content, 'проведение мероприятия.pdf'));
+        // }
 
         return response()->noContent();
     }
@@ -159,9 +164,11 @@ class PdfController extends Controller
         $content = $pdf->output();//'event_' . $validated['event_date'] . '.pdf');
         // Или: return $pdf->stream('event-report.pdf');
 
-        \App\Facades\BotMethods::bot()
-            ->sendDocument(env("TELEGRAM_ADMIN_CHANNEL"),"Волонтер",
-                \Telegram\Bot\FileUpload\InputFile::createFromContents($content,"заявка на волонтера.pdf"));
+        // if (env('TELEGRAM_ADMIN_CHANNEL')) {
+        //     \App\Facades\BotMethods::bot()
+        //         ->sendDocument(env('TELEGRAM_ADMIN_CHANNEL'), 'Волонтер',
+        //             \Telegram\Bot\FileUpload\InputFile::createFromContents($content, 'заявка на волонтера.pdf'));
+        // }
 
         return response()->noContent();
     }

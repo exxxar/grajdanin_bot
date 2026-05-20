@@ -1107,11 +1107,6 @@
 
                 <ul class="footer-contact">
                     <li>
-                        <i class="fa-solid fa-envelope"></i>
-                        support@example.ru
-                    </li>
-
-                    <li>
                         <i class="fa-solid fa-phone"></i>
                         +7 (999) 123-45-67
                     </li>
