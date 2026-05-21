@@ -12,27 +12,6 @@
                 Работает в тестовом режиме.
             </p>
 
-            <!-- Контакты -->
-            <div class="d-flex justify-content-center gap-4 fs-4 mb-3">
-
-                <a href="mailto:support@example.com" class="text-primary">
-                    <i class="fa-solid fa-envelope"></i>
-                </a>
-
-                <a href="tel:+70000000000" class="text-primary">
-                    <i class="fa-solid fa-phone"></i>
-                </a>
-
-                <a href="https://t.me/example" target="_blank" class="text-primary">
-                    <i class="fa-brands fa-telegram"></i>
-                </a>
-
-                <a href="https://vk.com/example" target="_blank" class="text-primary">
-                    <i class="fa-brands fa-vk"></i>
-                </a>
-
-            </div>
-
             <!-- Копирайт -->
             <div class="text-muted small">
                 © {{ new Date().getFullYear() }} Все права защищены

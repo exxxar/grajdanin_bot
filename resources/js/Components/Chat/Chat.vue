@@ -29,8 +29,10 @@
                         </div>
 
                         <small class="opacity-75">
-                            Проблема:
-                            {{ c.report?.title || 'Без названия' }}
+                            Заявка №{{ c.report_id || c.report?.id || '—' }}
+                            <span v-if="c.report?.incoming_report?.received_from">
+                                · {{ c.report.incoming_report.received_from }}
+                            </span>
                         </small>
 
                     </button>
@@ -205,7 +207,7 @@ export default {
     props: {
         reportId: {
             type: Number,
-            required: true
+            default: null
         }
     },
 
@@ -243,11 +245,17 @@ export default {
                 if (!user) return
 
                 const store = useMessagesStore()
-
                 await store.fetchChats()
 
-                // Ничего не открываем автоматически
-                // Пользователь сам выбирает диалог
+                if (this.reportId) {
+                    const chat = store.chats.find(
+                        (c) => c.report_id === this.reportId || c.report?.id === this.reportId
+                    )
+                    if (chat) {
+                        await store.loadChat(chat.id)
+                        this.tab = 'chat'
+                    }
+                }
             }
         }
     },
@@ -294,7 +302,14 @@ export default {
 
             const formData = new FormData()
 
-            formData.append('report_id', this.reportId)
+            if (this.reportId) {
+                formData.append('report_id', this.reportId)
+            } else if (store.chatId) {
+                const chat = store.chats.find((c) => c.id === store.chatId)
+                if (chat?.report_id) {
+                    formData.append('report_id', chat.report_id)
+                }
+            }
 
             if (store.chatId) {
                 formData.append('chat_id', store.chatId)

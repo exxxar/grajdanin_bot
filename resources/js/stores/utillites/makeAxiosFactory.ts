@@ -15,6 +15,8 @@ export async function makeAxiosFactory(
         return Promise.reject("Вы не в сети!");
     }
 
+    axios.defaults.withCredentials = true;
+
     const tgData = (window as any).Telegram?.WebApp.initData || null;
     axios.defaults.headers.common["X-TG-DATA"] = tgData ? btoa(tgData) : null;
 
@@ -56,8 +58,11 @@ export async function makeAxiosFactory(
             return Promise.reject("Сессия истекла");
         }
 
-        // Ошибка
-        alertStore.show(`Ошибка: ${error?.message || "Неизвестная ошибка"}`);
+        const validationMessage = error?.response?.data?.errors
+            ? Object.values(error.response.data.errors).flat().join('\n')
+            : error?.response?.data?.message;
+
+        alertStore.show(validationMessage || `Ошибка: ${error?.message || "Неизвестная ошибка"}`);
         // @ts-ignore
         return Promise.reject(error);
     }

@@ -19,7 +19,7 @@ class AuthController extends Controller
 
         $guest = User::create([
             'role' => RoleEnum::GUEST->value,
-            'email' => $uuid . '@example.com',
+            'email' => $uuid . '@guest.local',
             'uuid' => $uuid,
             'password' => Hash::make('secret'),
         ]);

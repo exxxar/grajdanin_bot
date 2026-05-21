@@ -107,8 +107,13 @@ Route::prefix("bot-api")
 
             // Входящие отчёты
             Route::prefix('incoming')->group(function () {
+                Route::get('/mine', [IncomingReportsController::class, 'mine'])
+                    ->middleware('auth')
+                    ->name('reports.incoming.mine');
                 Route::get('/', [IncomingReportsController::class, 'index'])->name('reports.incoming.index');
-                Route::post('/', [IncomingReportsController::class, 'store'])->name('reports.incoming.store');
+                Route::post('/', [IncomingReportsController::class, 'store'])
+                    ->middleware('auth')
+                    ->name('reports.incoming.store');
                 Route::post('/pdf-incoming-report', [\App\Http\Controllers\PdfController::class, 'generateIncomingPdf'])->name('reports.incoming.pdf-report');
                 Route::get('/{id}', [IncomingReportsController::class, 'show'])->name('reports.incoming.show');
                 Route::put('/{id}', [IncomingReportsController::class, 'update'])->name('reports.incoming.update');

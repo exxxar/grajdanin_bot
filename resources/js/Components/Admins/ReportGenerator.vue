@@ -28,7 +28,7 @@
         <div class="form-floating mb-2">
             <select
                 v-model="report.result_type"
-                class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                class="form-select" id="floatingSelect" aria-label="Выбор типа отчёта">
 
                 <option value="0">Классический отчет</option>
                 <option value="1">Расширенный отчет</option>

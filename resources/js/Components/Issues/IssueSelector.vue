@@ -54,12 +54,12 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="choose-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="choose-modal" tabindex="-1" aria-labelledby="chooseModalLabel"
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Окно выбора</h1>
+                    <h1 class="modal-title fs-5" id="chooseModalLabel">Окно выбора</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -175,7 +175,7 @@ export default {
         return {
 
             selected: null,
-            problems: []
+            problems: {}
         };
     },
 

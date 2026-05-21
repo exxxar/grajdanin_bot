@@ -67,10 +67,14 @@ class MessageController extends Controller
 
     public function userChats(Request $request)
     {
-        return Chat::whereHas('messages', function($q) use ($request) {
-            $q->where('user_id', $request->user()->id);
-        })
-            ->with('report')
+        $userId = $request->user()->id;
+
+        return Chat::query()
+            ->where(function ($q) use ($userId) {
+                $q->whereHas('messages', fn ($m) => $m->where('user_id', $userId))
+                    ->orWhereHas('report', fn ($r) => $r->where('from_user_id', $userId));
+            })
+            ->with(['report.incomingReport'])
             ->latest()
             ->get();
     }

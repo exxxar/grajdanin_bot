@@ -80,7 +80,7 @@ import CardSlider from "@/Components/Slider/CardSlider.vue";
             @click="tab='main'"
             class="btn btn-light text-secondary mb-3" style="position: sticky; top:80px; z-index: 100;">К меню</button>
 
-        <IncomingReportForm v-on:success="tab='main'"></IncomingReportForm>
+        <IncomingReportForm @success="onIncomingSuccess"></IncomingReportForm>
     </template>
 
     <template v-if="tab==='event-request'">
@@ -114,6 +114,9 @@ export default {
           }
         },
         methods:{
+            onIncomingSuccess() {
+                this.tab = 'main'
+            },
             hideModal(modalId){
                 const modalEl = document.getElementById(modalId)
                 const modalInstance = bootstrap.Modal.getInstance(modalEl)

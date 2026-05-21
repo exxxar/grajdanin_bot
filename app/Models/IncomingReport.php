@@ -10,30 +10,28 @@ class IncomingReport extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'report_id',
         'received_from',
         'problem_description',
         'help_formats',
         'comment',
+        'problems',
+        'solutions',
+        'difficulties',
+        'audio_files',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
             'id' => 'integer',
             'report_id' => 'integer',
             'help_formats' => 'array',
+            'problems' => 'array',
+            'solutions' => 'array',
+            'difficulties' => 'array',
+            'audio_files' => 'array',
         ];
     }
 
