@@ -1,152 +1,291 @@
 <template>
-    <div class="row row-cols-2">
-        <div class="col mb-0 mt-0 p-1 " v-for="item in issues">
-            <div
-                data-bs-toggle="modal" data-bs-target="#choose-modal"
-                @click="selectIssueCategory(item)"
-                style="min-height:120px;"
-                class="card border-light-subtle shadow-sm rounded-23">
-                <div class="card-body d-flex flex-column justify-content-center align-items-center p-1">
-                    <div
-                        style="font-size:36px;"
-                        v-html="item.icon"></div>
-                    <div
-                        class="text-center fw-bold"
-                        style="line-height: 120%;font-size:12px; "
-                        v-html="item.name"></div>
 
+    <div class="container mb-2 p-0">
+        <!-- CATEGORY LIST -->
+        <template v-if="selected === null">
 
-                    <span
-                        v-if="(problems[item.id]?.length || 0)>0"
-                        class="badge bg-warning rounded-3"
-                        style="position:absolute; top:10px;right:10px;font-size:14px;">
-                                {{ problems[item.id]?.length || 0 }}</span>
-                </div>
-
+            <!-- GLOBAL SEARCH -->
+            <div class="form-floating mb-3">
+                <input
+                    type="text"
+                    class="form-control"
+                    id="globalSearchInput"
+                    placeholder="Поиск по категориям"
+                    v-model="globalSearch"
+                >
+                <label for="globalSearchInput">Поиск по категориям</label>
             </div>
 
-        </div>
 
-        <div class="col mb-0 mt-0 p-1">
-            <div
-                data-bs-toggle="modal" data-bs-target="#choose-modal"
-                @click="selectIssueCategory(null)"
-                style="min-height:120px;"
-                class="card mb-2 border-warning shadow-sm">
-                <div class="card-body d-flex flex-column justify-content-center align-items-center p-1">
-                    <div
-                        style="font-size:36px;"
-                    ><i class="fa-solid fa-circle-question text-warning"></i></div>
-                    <div
-                        class="text-center fw-bold text-warning"
-                        style="line-height: 120%;font-size:12px; ">Другое
+            <!-- SEARCH RESULTS -->
+            <div v-if="globalSearch.trim() && searchResultsByCategory?.length">
+
+                <div
+                    v-for="res in searchResultsByCategory"
+                    :key="res.category.id"
+                    class="card mb-2 shadow-sm rounded-3 border-light-subtle"
+                    style="cursor:pointer;"
+                    @click="selectCategory(res.category)"
+                >
+                    <div class="card-body">
+
+                        <div class="fw-bold mb-2">
+                            {{ res.category.name }}
+                            <span class="badge bg-primary ms-2">{{ res.matches.length }}</span>
+                        </div>
+
+                        <div class="small text-muted">
+                            {{ res.matches.join(', ') }}
+                        </div>
+
                     </div>
-
-
-                    <span
-                        v-if="(problems[0]?.length || 0)>0"
-                        class="badge bg-warning"
-                        style="position:absolute; top:0px;right:0px;font-size:14px;">
-                                {{ problems[0]?.length || 0 }}</span>
                 </div>
+
             </div>
-        </div>
-    </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="choose-modal" tabindex="-1" aria-labelledby="chooseModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="chooseModalLabel">Окно выбора</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
+            <!-- NO RESULTS -->
+            <p
+                v-if="globalSearch.trim() && searchResultsByCategory?.length === 0"
+                class="alert alert-light text-muted fw-bold"
+            >
+                Ничего не найдено
+            </p>
 
 
-                    <template v-if="selected">
-                        <ul class="list-group">
-                            <li
-                                @click="toggleIssue(item)"
-                                v-for="item in JSON.parse(selected?.variants)"
-                                class="list-group-item p-3 fw-bold d-flex justify-content-between"
-                                aria-current="true">
-                                <span>{{ item }}</span>
-                                <span v-if="(problems[selected.id] || []).includes(item)"><i
-                                    class="fa fa-check text-primary "></i></span>
-                            </li>
+            <template v-if="!globalSearch.trim()">
+                <div class="row row-cols-2">
 
-                        </ul>
+                    <div
+                        v-for="item in issues"
+                        :key="item.id"
+                        class="col p-1"
+                    >
+                        <div
+                            class="card border-light-subtle shadow-sm rounded-4"
+                            style="min-height:120px; cursor:pointer;"
+                            @click="selectCategory(item)"
+                        >
+                            <div class="card-body d-flex flex-column justify-content-center align-items-center p-1">
 
-                        <button type="button"
-                                @click="problems[selected.id]=[]"
-                                class="btn btn-outline-light p-3 mt-2 text-primary w-100">Очистить
-                        </button>
+                                <div
+                                    style="font-size:36px;"
+                                    v-html="item.icon"
+                                ></div>
 
-                    </template>
-
-                    <template v-else>
-                        <p
-                            v-if="(problems[0]||[]).length===0"
-                            class="alert alert-light text-primary mb-2 fw-bold">
-                            Вы еще ничего не добавили
-                        </p>
-                        <template v-for="(item, index) in (problems[0]||[])">
-
-
-                            <div class="input-group mb-2">
-
-                                <div class="form-floating">
-                                    <input type="text"
-                                           v-model="problems[0][index]"
-                                           class="form-control" :id="'issue-custom-input-'+index"
-                                           placeholder="Проблема">
-                                    <label :for="'issue-custom-input-'+index">Введите текст #{{ index }}</label>
+                                <div
+                                    class="text-center fw-bold"
+                                    style="line-height:120%; font-size:12px;"
+                                >
+                                    {{ item.name }}
                                 </div>
 
-                                <span class="input-group-text" id="basic-addon1">
-                                           <button
-                                               type="button"
-                                               class="btn btn-link ml-2 text-danger"
-                                               @click="removeIssue(index)"
-                                           >
-                            <i class="fas fa-trash"></i>
-                        </button>
-                                    </span>
+                                <span
+                                    v-if="(problems[item.id]?.length || 0) > 0"
+                                    class="badge bg-primary rounded-3"
+                                    style="position:absolute; top:10px; right:10px;"
+                                >
+                            {{ problems[item.id].length }}
+                        </span>
+
                             </div>
-                        </template>
+                        </div>
+                    </div>
+
+                    <!-- OTHER -->
+                    <div class="col p-1">
+
+                        <div
+                            class="card border-primary shadow-sm rounded-4"
+                            style="min-height:120px; cursor:pointer;"
+                            @click="selectCategory('other')"
+                        >
+                            <div class="card-body d-flex flex-column justify-content-center align-items-center p-1">
+
+                                <div style="font-size:36px;">
+                                    <i class="fa-solid fa-circle-question text-primary"></i>
+                                </div>
+
+                                <div
+                                    class="text-center fw-bold text-primary"
+                                    style="line-height:120%; font-size:12px;"
+                                >
+                                    Другое
+                                </div>
+
+                                <span
+                                    v-if="(problems[0]?.length || 0) > 0"
+                                    class="badge bg-primary rounded-3"
+                                    style="position:absolute; top:10px; right:10px;"
+                                >
+                            {{ problems[0].length }}
+                        </span>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </template>
 
 
-                        <button type="button"
-                                :disabled="(problems[0]||[]).length>=10"
-                                @click="addAnotherProblem"
-                                class="btn btn-outline-light p-3 mt-2 text-primary w-100">Добавить еще
+        </template>
+
+        <!-- DETAILS -->
+        <template v-else>
+
+            <!-- HEADER -->
+            <div class="d-flex align-items-center mb-3">
+
+                <button
+                    type="button"
+                    class="btn btn-light me-2"
+                    @click="selected = null"
+                >
+                    <i class="fa fa-arrow-left"></i>
+                </button>
+
+                <h5 class="mb-0 fw-bold">
+                    {{ selected === 'other' ? 'Другое' : selected.name }}
+                </h5>
+
+            </div>
+
+            <!-- OTHER -->
+            <template v-if="selected === 'other'">
+
+                <p
+                    v-if="(problems[0] || []).length === 0"
+                    class="alert alert-light text-primary fw-bold"
+                >
+                    Вы еще ничего не добавили
+                </p>
+
+                <template
+                    v-for="(item, index) in (problems[0] || [])"
+                    :key="index"
+                >
+
+                    <div class="input-group mb-2">
+
+                        <div class="form-floating">
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                v-model="problems[0][index]"
+                                :id="'custom-problem-'+index"
+                                placeholder="Введите текст"
+                            >
+
+                            <label :for="'custom-problem-'+index">
+                                Проблема #{{ index + 1 }}
+                            </label>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            class="btn btn-outline-light text-danger border-light-subtle rounded-end-4"
+                            @click="removeIssue(index)"
+                        >
+                            <i class="fa fa-trash"></i>
                         </button>
 
-                    </template>
-                </div>
-                <div class="modal-footer">
-                    <button type="button"
+                    </div>
 
-                            class="btn btn-outline-secondary p-3 w-100" data-bs-dismiss="modal">Продолжить
+                </template>
+
+                <button
+                    type="button"
+                    class="btn btn-outline-primary w-100 p-2 rounded-4"
+                    :disabled="(problems[0] || []).length >= 10"
+                    @click="addAnotherProblem"
+                >
+                    Добавить еще
+                </button>
+
+            </template>
+
+            <!-- VARIANTS -->
+            <template v-else>
+
+                <!-- SEARCH INPUT -->
+                <div class="form-floating mb-3">
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="searchInput"
+                        placeholder="Поиск"
+                        v-model="search"
+                    >
+                    <label for="searchInput">Поиск по проблемам</label>
+                </div>
+
+                <!-- LIST -->
+                <div class="list-group shadow-sm rounded-3 overflow-hidden">
+
+                    <button
+                        type="button"
+                        v-for="item in filteredVariants"
+                        :key="item"
+                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-3 fw-bold"
+                        @click="toggleIssue(item)"
+                    >
+                        <span>{{ item }}</span>
+
+                        <i
+                            v-if="(problems[selected.id] || []).includes(item)"
+                            class="fa fa-check text-primary"
+                        ></i>
                     </button>
 
+                    <p
+                        v-if="filteredVariants.length === 0"
+                        class="list-group-item text-center text-muted py-3"
+                    >
+                        Ничего не найдено
+                    </p>
+
                 </div>
-            </div>
-        </div>
+
+                <button
+                    type="button"
+                    class="btn btn-outline-danger w-100 mt-2 p-2 rounded-4"
+                    v-if="(problems[selected.id]?.length || 0) > 0"
+                    @click="clearSelected"
+                >
+                    Очистить
+                </button>
+
+            </template>
+
+
+            <!--        &lt;!&ndash; APPLY &ndash;&gt;
+                    <button
+                        type="button"
+                        class="btn btn-primary w-100 mt-3 p-3"
+                        @click="selected = null"
+                    >
+                        Применить
+                    </button>-->
+
+        </template>
     </div>
+
+
 </template>
+
 <script>
-
-
 export default {
     name: "IssueSelector",
+
     props: {
         issues: {
             type: Array,
             required: true
         },
+
         modelValue: {
             type: Object,
             default: () => ({})
@@ -155,51 +294,101 @@ export default {
 
     emits: ['update:modelValue'],
 
+    data() {
+        return {
+            selected: null,
+            problems: {},
+            globalSearch: "",
+            search: ""
+
+        }
+    },
+
+    computed: {
+        searchResultsByCategory() {
+            const q = this.globalSearch.trim().toLowerCase()
+            if (!q) return null
+
+            const results = []
+
+            for (const cat of this.issues) {
+                const variants = typeof cat.variants === "string"
+                    ? JSON.parse(cat.variants || "[]")
+                    : (cat.variants || [])
+
+                const matched = variants.filter(v =>
+                    v.toLowerCase().includes(q)
+                )
+
+                if (matched.length > 0) {
+                    results.push({
+                        category: cat,
+                        matches: matched
+                    })
+                }
+            }
+
+            return results
+        },
+        filteredVariants() {
+            const q = this.search.trim().toLowerCase()
+
+            if (!q) return this.parsedVariants
+
+            return this.parsedVariants.filter(v =>
+                v.toLowerCase().includes(q)
+            )
+        },
+        parsedVariants() {
+            if (!this.selected?.variants) {
+                return []
+            }
+
+            try {
+
+                return typeof this.selected.variants === 'string'
+                    ? JSON.parse(this.selected.variants)
+                    : this.selected.variants
+
+            } catch (e) {
+
+                return []
+
+            }
+
+        }
+
+    },
+
     watch: {
-        /*      modelValue: {
-                  immediate: true,
-                  deep: true,
-                  handler(val) {
-                      // делаем копию, чтобы не мутировать prop напрямую
-                      this.problems = JSON.parse(JSON.stringify(val || {}))
-                  }
-              },*/
+
+        modelValue: {
+            immediate: true,
+            deep: true,
+
+            handler(val) {
+                this.problems = JSON.parse(JSON.stringify(val || {}))
+            }
+        },
+
         problems: {
             deep: true,
+
             handler(val) {
                 this.$emit('update:modelValue', val)
             }
         }
-    },
-    data() {
-        return {
 
-            selected: null,
-            problems: {}
-        };
     },
 
-    mounted() {
-        if (this.modelValue)
-            this.problems = JSON.parse(JSON.stringify(this.modelValue || {}))
-    },
     methods: {
-        selectIssueCategory(item) {
-            this.selected = null
-            this.$nextTick(() => {
-                this.selected = item
-            })
+
+        selectCategory(item) {
+            this.selected = item
         },
-        removeIssue(index) {
-            this.problems[0].splice(index, 1)
-        },
-        addAnotherProblem() {
-            if (!this.problems[0])
-                this.problems[0] = []
-            else
-                this.problems[0].push("")
-        },
+
         toggleIssue(item) {
+
             const key = this.selected.id
 
             if (!this.problems[key]) {
@@ -209,16 +398,55 @@ export default {
             const index = this.problems[key].indexOf(item)
 
             if (index !== -1) {
+
                 this.problems[key].splice(index, 1)
+
             } else {
+
                 this.problems[key].push(item)
+
             }
 
-            // если список пуст — удаляем ключ
             if (this.problems[key].length === 0) {
                 delete this.problems[key]
             }
+
+        },
+
+        clearSelected() {
+
+            if (!this.selected?.id) {
+                return
+            }
+
+            delete this.problems[this.selected.id]
+
+        },
+
+        addAnotherProblem() {
+
+            if (!this.problems[0]) {
+
+                this.problems[0] = [""]
+
+            } else {
+
+                this.problems[0].push("")
+
+            }
+
+        },
+
+        removeIssue(index) {
+
+            this.problems[0].splice(index, 1)
+
+            if (this.problems[0].length === 0) {
+                delete this.problems[0]
+            }
+
         }
+
     }
 
 }

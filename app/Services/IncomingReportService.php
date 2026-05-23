@@ -38,15 +38,17 @@ class IncomingReportService
                 ?? User::query()->where('role', '>=', RoleEnum::OFFICIAL->value)->value('id')
                 ?? $user->id;
 
+
             $report = Report::create([
-                'type' => ReportTypeEnum::INCOMING->value,
+
                 'priority' => 0,
                 'from_user_id' => $user->id,
                 'to_user_id' => $toUserId,
                 'municipality_id' => $validated['municipality_id'],
                 'received_at' => $validated['received_at'],
                 'phone' => $validated['phone'] ?? null,
-                'documents' => [],
+                'documents' => json_encode([]),
+                'type' => ReportTypeEnum::INCOMING->value,
             ]);
 
             $documentMeta = $this->fileStorage->storeMany(
@@ -67,16 +69,17 @@ class IncomingReportService
                 $report->update(['documents' => $documentMeta]);
             }
 
+
             $incoming = IncomingReport::create([
                 'report_id' => $report->id,
                 'received_from' => $validated['received_from'] ?? null,
                 'problem_description' => $validated['problem_description'],
-                'help_formats' => $helpFormats,
+                'help_formats' => json_encode($helpFormats),
                 'comment' => $validated['comment'] ?? null,
-                'problems' => $validated['problems'] ?? null,
-                'solutions' => $validated['solutions'] ?? null,
-                'difficulties' => $validated['difficulties'] ?? null,
-                'audio_files' => $audioMeta,
+                'problems' =>  json_encode($validated['problems'] ?? []),
+                'solutions' =>  json_encode($validated['solutions'] ?? []),
+                'difficulties' =>  json_encode($validated['difficulties'] ?? []),
+                'audio_files' => json_encode($audioMeta),
             ])->load('report');
 
             $reportUrl = ReportUrlBuilder::forReport($report->id);
@@ -103,7 +106,7 @@ class IncomingReportService
             'user_id' => $user->id,
             'report_id' => $report->id,
             'chat_id' => $chat->id,
-            'type' => 'system',
+         //   'type' => 'system',
             'text' => sprintf(
                 'Заявка №%d принята. %s от %s. Открыть: %s',
                 $report->id,

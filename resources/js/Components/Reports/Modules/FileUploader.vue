@@ -1,6 +1,6 @@
 <template>
     <div class="mb-3">
-        <label class="form-label fw-bold">
+        <label class="form-label fw-bold small">
             Прикрепить документы (до 10 файлов)
         </label>
 

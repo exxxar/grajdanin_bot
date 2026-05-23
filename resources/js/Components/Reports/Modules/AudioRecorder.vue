@@ -1,22 +1,47 @@
 <template>
     <div class="mb-3">
-        <label class="form-label fw-bold">
-            Голосовые сообщения (до {{ maxFiles }})
+        <label class="form-label fw-bold small">
+            Голосовые сообщения  <span v-if="audios.length>0">{{audios.length}}/{{maxFiles}}</span>
         </label>
 
-        <div class="btn-group mb-2 w-100 p-3" role="group">
+        <div class="btn-group mb-2 w-100" role="group">
             <button
                 type="button"
-                class="btn btn-outline-primary p-2"
+                class="btn btn-outline-primary p-2 rounded-start-4"
                 :disabled="isRecording || audios.length >= maxFiles"
                 @click="startRecording"
             >
-                <i class="fa-solid fa-microphone"></i> Записать
+
+
+
+                <template v-if="isRecording">
+                    <div class="voice-bars w-100 d-flex justify-content-center align-items-center">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                </template>
+
+                <template v-else>
+
+                    <p class="d-flex align-items-center mb-0 justify-content-center">
+                        <i class="fa-solid fa-microphone"></i>
+                        Записать
+                    </p>
+                </template>
             </button>
 
             <button
                 type="button"
-                class="btn btn-outline-danger p-2"
+                class="btn btn-outline-danger p-2 rounded-end-4"
                 :disabled="!isRecording"
                 @click="stopRecording"
             >
@@ -127,3 +152,42 @@ export default {
     }
 }
 </script>
+<style>
+.voice-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 20px;
+}
+
+.voice-bars span {
+    width: 4px;
+    height: 4px;
+    background: #444444;
+    border-radius: 2px;
+    animation: voice 0.8s infinite ease-in-out;
+}
+.voice-bars span:nth-child(4),
+.voice-bars span:nth-child(7),
+.voice-bars span:nth-child(1) {
+    animation-delay: 0s;
+}
+.voice-bars span:nth-child(2),
+.voice-bars span:nth-child(5),
+.voice-bars span:nth-child(8) {
+    animation-delay: 0.2s;
+}
+
+.voice-bars span:nth-child(3),
+.voice-bars span:nth-child(6),
+.voice-bars span:nth-child(9) {
+    animation-delay: 0.4s;
+}
+
+@keyframes voice {
+    0%   { height: 4px; }
+    50%  { height: 20px; }
+    100% { height: 4px; }
+}
+
+</style>

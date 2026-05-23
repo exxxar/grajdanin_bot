@@ -15,7 +15,7 @@ export interface EventRequest {
     updated_at?: string
 }
 
-const path = '/bot-api/reports/events'
+const path = '/api/reports/events'
 
 export const useEventRequestsStore = defineStore('eventRequests', {
     state: () => ({

@@ -13,7 +13,7 @@ export interface IssueCategory {
     updated_at?: string
 }
 
-const path = '/bot-api/issue-categories'
+const path = '/api/issue-categories'
 
 export const useIssueCategoriesStore = defineStore('issueCategories', {
     state: () => ({

@@ -13,7 +13,7 @@ export interface ResultReport {
     updated_at?: string
 }
 
-const path = '/bot-api/reports/result'
+const path = '/api/reports/result'
 
 export const useResultReportsStore = defineStore('resultReports', {
     state: () => ({

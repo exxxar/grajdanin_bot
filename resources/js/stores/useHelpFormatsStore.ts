@@ -10,7 +10,7 @@ export interface HelpFormat {
     updated_at?: string
 }
 
-const path = '/bot-api/help-formats'
+const path = '/api/help-formats'
 
 export const useHelpFormatsStore = defineStore('helpFormats', {
     state: () => ({

@@ -23,7 +23,7 @@ import CardSlider from "@/Components/Slider/CardSlider.vue";
             <div class="col-md-4">
                 <div class="card h-100 menu-card rounded-4"
                      @click="tab='incoming-request'">
-                    <div class="card-body text-center p-4">
+                    <div class="card-body text-center px-2 py-3">
                         <i class="fa-solid fa-triangle-exclamation fa-3x mb-3 text-primary"></i>
 
                         <h5 class="card-title">
@@ -41,7 +41,7 @@ import CardSlider from "@/Components/Slider/CardSlider.vue";
             <div class="col-md-4">
                 <div class="card h-100 menu-card rounded-4"
                      @click="tab='event-request'">
-                    <div class="card-body text-center p-4">
+                    <div class="card-body text-center px-2 py-3">
                         <i class="fa-solid fa-calendar-days fa-3x mb-3 text-success"></i>
 
                         <h5 class="card-title">
@@ -58,7 +58,7 @@ import CardSlider from "@/Components/Slider/CardSlider.vue";
             <div class="col-md-4">
                 <div class="card h-100 menu-card rounded-4"
                      @click="tab='volunteer-form'">
-                    <div class="card-body text-center p-4">
+                    <div class="card-body text-center px-2 py-3">
                         <i class="fa-solid fa-hand-holding-heart fa-3x mb-3 text-danger"></i>
 
                         <h5 class="card-title">

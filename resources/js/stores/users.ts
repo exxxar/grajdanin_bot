@@ -16,7 +16,7 @@ export interface User {
     blocked_message?: string
 }
 
-const path: string = '/bot-api/users'
+const path: string = '/api/users'
 
 
 export const useUsersStore = defineStore('users', {

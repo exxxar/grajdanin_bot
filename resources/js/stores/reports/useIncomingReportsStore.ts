@@ -27,7 +27,7 @@ export interface IncomingReportCreateResult extends IncomingReport {
     report_url?: string
 }
 
-const path = '/bot-api/reports/incoming'
+const path = '/api/reports/incoming'
 
 export const useIncomingReportsStore = defineStore('incomingReports', {
     state: () => ({

@@ -1,9 +1,9 @@
 <template>
     <div class="card shadow-sm border-0">
-        <div class="card-body d-flex align-items-center gap-3">
+        <div class="card-body d-flex align-items-center gap-2">
 
             <div class="avatar bg-primary text-white rounded-circle d-flex justify-content-center align-items-center"
-                 style="width: 48px; height: 48px;">
+                 style="width: 40px; height: 40px;">
                 <i class="fa-solid fa-user"></i>
             </div>
 

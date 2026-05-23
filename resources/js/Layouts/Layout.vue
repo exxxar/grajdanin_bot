@@ -80,7 +80,10 @@ import PrimaryForm from "@/Components/Users/Forms/PrimaryForm.vue";
 
     </div>
 
-    <Footer></Footer>
+    <template v-if="!$route.meta.hide_footer">
+        <Footer></Footer>
+    </template>
+
 
 
     <div class="offcanvas offcanvas-start custom-offcanvas"

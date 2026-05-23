@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { makeAxiosFactory } from './utillites/makeAxiosFactory'
 import { useAlertStore } from './utillites/useAlertStore'
 
-const path: string = '/bot-api/exports'
+const path: string = '/api/exports'
 
 export const useBaseExports = defineStore('exports', {
     state: () => ({

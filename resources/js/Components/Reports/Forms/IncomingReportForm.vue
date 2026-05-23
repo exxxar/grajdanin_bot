@@ -2,6 +2,7 @@
 import IssueSelector from "@/Components/Issues/IssueSelector.vue";
 import AudioRecorder from "@/Components/Reports/Modules/AudioRecorder.vue";
 import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
+import MapPicker from "@/Components/Reports/MapPicker.vue";
 </script>
 <template>
     <form @submit.prevent="submitForm" class="card rounded-2">
@@ -15,16 +16,58 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
                         :style="{ width: (step / maxStep * 100) + '%' }"
                     ></div>
                 </div>
-                <p class="text-center mt-2">Шаг {{ step }} из {{ maxStep  }}</p>
+                <p class="text-center mt-2">Шаг {{ step }} из {{ maxStep }}</p>
             </div>
             <template v-if="step===1">
                 <h5 class="mb-2">Регистрация жалобы</h5>
 
 
-                <div class="form-floating mb-2">
-                    <input type="text" class="form-control" v-model="form.received_from" required>
-                    <label>От кого (ФИО)</label>
+                <div class="row g-2">
+
+                    <!-- ФАМИЛИЯ -->
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="lastName"
+                                placeholder="Фамилия"
+                                v-model="form.fio.last"
+                            >
+                            <label for="lastName">Фамилия</label>
+                        </div>
+                    </div>
+
+                    <!-- ИМЯ -->
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="firstName"
+                                placeholder="Имя"
+                                v-model="form.fio.first"
+                            >
+                            <label for="firstName">Имя</label>
+                        </div>
+                    </div>
+
+                    <!-- ОТЧЕСТВО -->
+                    <div class="col-12">
+                        <div class="form-floating mb-2">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="middleName"
+                                placeholder="Отчество"
+                                v-model="form.fio.middle"
+                            >
+                            <label for="middleName">Отчество</label>
+                        </div>
+                    </div>
+
                 </div>
+
 
                 <div class="form-floating mb-2">
                     <input type="text"
@@ -36,7 +79,7 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
 
                 <div class="form-floating mb-2">
                     <select class="form-select" v-model="form.municipality_id" required>
-                        <template v-for="m in municipalityStore.items">
+                        <template v-for="m in municipalityStore.items" :key="m.id">
                             <option
                                 v-if="(m.config?.access_role||0)>=user.role"
                                 :key="m.id" :value="m.id">
@@ -47,13 +90,101 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
                     <label>Муниципалитет</label>
                 </div>
 
+                <div class="form-check form-switch mb-3">
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="attachDocsSwitch"
+                        v-model="needAddressDetails"
+                    >
+                    <label class="form-check-label fw-bold" for="attachDocsSwitch">
+                       Указать точный адрес
+                    </label>
+                </div>
 
+                <template v-if="needAddressDetails">
+                    <div class="row g-2">
+
+                        <!-- ГОРОД -->
+                        <div class="col-12">
+
+                            <div class="form-floating">
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="addrCity"
+                                    placeholder="Город"
+                                    v-model="form.address.city"
+                                >
+                                <label for="addrCity">Город</label>
+                            </div>
+                        </div>
+
+                        <!-- РАЙОН (НЕОБЯЗАТЕЛЬНО) -->
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="addrDistrict"
+                                    placeholder="Район"
+                                    v-model="form.address.district"
+                                >
+                                <label for="addrDistrict">Район (необязательно)</label>
+                            </div>
+                        </div>
+
+                        <!-- УЛИЦА -->
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="addrStreet"
+                                    placeholder="Улица"
+                                    v-model="form.address.street"
+                                >
+                                <label for="addrStreet">Улица</label>
+                            </div>
+                        </div>
+
+                        <!-- ДОМ -->
+                        <div class="col-12">
+                            <div class="form-floating mb-2">
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="addrHouse"
+                                    placeholder="Дом"
+                                    v-model="form.address.house"
+                                >
+                                <label for="addrHouse">Дом</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <p
+                        @click="needMap=!needMap"
+                        class="text-center mb-2 btn btn-link w-100">Или указать на карте
+                        <span v-if="needMap">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </span>
+                        <span v-else>
+                            <i class="fa-solid fa-chevron-up"></i>
+                        </span>
+                    </p>
+                    <template v-if="needMap">
+                        <MapPicker :address="fullAddress" class="mb-2"></MapPicker>
+                    </template>
+
+                </template>
             </template>
             <template v-if="step===2">
                 <h5 class="mb-2">Какая у вас проблемная ситуация?</h5>
                 <IssueSelector
                     v-model="form.problems"
                     :issues="problems"></IssueSelector>
+                <hr>
             </template>
             <template v-if="step===3">
                 <h5 class="mb-2">Способы решения проблемы</h5>
@@ -73,32 +204,62 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
 
 
                 <div class="form-floating mb-2">
-                    <textarea class="form-control" style="height: 120px" v-model="form.problem_description" required minlength="10"></textarea>
+                    <textarea class="form-control" style="height: 120px" v-model="form.problem_description" required
+                              minlength="10"></textarea>
                     <label>Особенности проблемы *</label>
                 </div>
 
-                <div class="mb-2">
-                    <label class="form-label small">Форматы помощи</label>
+                <div class="form-check form-switch mb-2">
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="needVoiceRecord"
+                        v-model="needVoiceRecord"
+                    >
+                    <label class="form-check-label fw-bold" for="needVoiceRecord">
+                        Пояснить проблему голосом
+                    </label>
+                </div>
 
-                    <template v-for="(item, index) in form.help_formats" :key="index">
-                        <div class="input-group flex-nowrap mb-2">
-                            <div class="form-floating">
-                                <select
-                                    class="form-select"
-                                    v-model="form.help_formats[index]"
-                                >
-                                    <option
-                                        v-for="hf in availableHelpFormats(index)"
-                                        :key="hf.id"
-                                        :value="hf.id"
+                <template v-if="needVoiceRecord">
+                    <AudioRecorder v-model="form.audio_files"></AudioRecorder>
+                </template>
+
+                <div class="form-check form-switch mb-2">
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="needHelpSwitch"
+                        v-model="needHelp"
+                    >
+                    <label class="form-check-label fw-bold" for="needHelpSwitch">
+                        Нужна помощь партии
+                    </label>
+                </div>
+
+                <template v-if="needHelp">
+                    <div class="mb-2">
+                        <label class="form-label small fw-bold">Форматы помощи партии</label>
+
+                        <template v-for="(item, index) in form.help_formats" :key="index">
+                            <div class="input-group flex-nowrap mb-2">
+                                <div class="form-floating">
+                                    <select
+                                        class="form-select"
+                                        v-model="form.help_formats[index]"
                                     >
-                                        {{ hf.name }}
-                                    </option>
-                                </select>
-                                <label>Формат помощи #{{ index + 1 }}</label>
-                            </div>
+                                        <option
+                                            v-for="hf in availableHelpFormats(index)"
+                                            :key="hf.id"
+                                            :value="hf.id"
+                                        >
+                                            {{ hf.name }}
+                                        </option>
+                                    </select>
+                                    <label>Формат помощи #{{ index + 1 }}</label>
+                                </div>
 
-                            <span class="input-group-text">
+                                <span class="input-group-text">
             <button
                 type="button"
                 class="btn btn-outline-danger btn-sm w-100"
@@ -107,170 +268,140 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
                 ×
             </button>
         </span>
-                        </div>
-                    </template>
+                            </div>
+                        </template>
 
 
-                    <button type="button"
-                            class="btn btn-outline-primary w-100 p-3"
-                            @click="addHelpFormat"
-                            :disabled="!hasAvailableHelpFormats">
-                        Добавить формат помощи
-                    </button>
+                        <button type="button"
+                                class="btn btn-outline-primary w-100 p-2 rounded-4"
+                                @click="addHelpFormat"
+                                :disabled="!hasAvailableHelpFormats">
+                            Добавить формат помощи
+                        </button>
+                    </div>
+
+                    <div class="form-floating mb-2">
+                        <input type="date" class="form-control" v-model="form.received_at">
+                        <label>Дата получения</label>
+                    </div>
+                </template>
+
+
+                <div class="form-check form-switch mb-3">
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="attachDocsSwitch"
+                        v-model="attachDocs"
+                    >
+                    <label class="form-check-label fw-bold" for="attachDocsSwitch">
+                        Прикрепить документы
+                    </label>
                 </div>
 
-
-                <!-- to_user_id -->
-                <!--        <div class="form-floating mb-2">
-                            <select class="form-select" v-model="form.to_user_id">
-                                <option v-for="u in officials" :key="u.id" :value="u.id">
-                                    {{ u.name }}
-                                </option>
-                            </select>
-                            <label>Официальное лицо</label>
-                        </div>-->
+                <template v-if="attachDocs">
+                    <FileUploader v-model="form.documents"></FileUploader>
 
 
-                <!-- received_at -->
-                <div class="form-floating mb-2">
-                    <input type="date" class="form-control" v-model="form.received_at">
-                    <label>Дата получения</label>
-                </div>
-
-
-                <!-- help_formats dynamic -->
-
-                <!-- comment -->
-                <div class="form-floating mb-2">
-                    <textarea class="form-control" style="height: 100px" v-model="form.comment"></textarea>
-                    <label>Комментарий</label>
-                </div>
-
-                <FileUploader v-model="form.documents"></FileUploader>
-
-
-                <AudioRecorder v-model="form.audio_files"></AudioRecorder>
+                </template>
 
 
             </template>
 
-            <template v-if="step===6">
+            <template v-if="step === 6">
                 <div class="card shadow-sm border-light-subtle mb-2">
                     <div class="card-header fw-bold">
                         Сводная информация
                     </div>
 
-                    <div class="card-body p-0 ">
-
+                    <div class="card-body p-0">
                         <ul class="list-group list-group-flush">
 
-                            <!-- От кого -->
-                            <li class="list-group-item" v-if="form.received_from">
+                            <!-- ФИО -->
+                            <li class="list-group-item" v-if="summary.received_from">
                                 <strong>Ф.И.О.:</strong>
-                                <span class="ms-2">{{ form.received_from }}</span>
+                                <span class="ms-2">{{ summary.received_from }}</span>
                             </li>
 
                             <!-- Телефон -->
-                            <li class="list-group-item" v-if="form.phone">
+                            <li class="list-group-item" v-if="summary.phone">
                                 <strong>Телефон:</strong>
-                                <span class="ms-2">{{ form.phone }}</span>
+                                <span class="ms-2">{{ summary.phone }}</span>
                             </li>
 
                             <!-- Муниципалитет -->
-                            <li class="list-group-item" v-if="form.municipality_id">
+                            <li class="list-group-item" v-if="summary.municipality">
                                 <strong>Муниципалитет:</strong>
-                                <span class="ms-2">{{ municipalityStore.byId(form.municipality_id).name }}</span>
+                                <span class="ms-2">{{ summary.municipality }}</span>
                             </li>
 
                             <!-- Проблемы -->
-                            <li class="list-group-item" v-if="hasIssueSelections(form.problems)">
+                            <li class="list-group-item" v-if="summary.problems.length">
                                 <strong>Проблемы:</strong>
                                 <ul class="mt-1">
-                                    <template v-for="(item, i) in form.problems">
-                                        <li :key="i" v-if="item">
-                                            <h6 class="fw-bold small">{{ issueStore.byId(i).name }}</h6>
-                                            <p class="mb-1 small" v-for="p in item">{{ p }}</p>
-                                        </li>
-                                    </template>
-
+                                    <li v-for="item in summary.problems" :key="item.id">
+                                        <h6 class="fw-bold small">{{ item.name }}</h6>
+                                        <p class="mb-1 small" v-for="p in item.items">{{ p }}</p>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="list-group-item" v-else>
-                                <p class="alert alert-info mb-0">
-                                    Проблемы не указаны
-                                </p>
+                                <p class="alert alert-info mb-0">Проблемы не указаны</p>
                             </li>
 
-                            <!-- Описание проблемы -->
-                            <li class="list-group-item" v-if="form.problem_description">
+                            <!-- Особенности -->
+                            <li class="list-group-item" v-if="summary.problem_description">
                                 <strong>Особенности проблемы:</strong>
-                                <div class="mt-1 text-muted">
-                                    {{ form.problem_description }}
-                                </div>
+                                <div class="mt-1 text-muted">{{ summary.problem_description }}</div>
                             </li>
-
 
                             <!-- Решения -->
-                            <li class="list-group-item" v-if="hasIssueSelections(form.solutions)">
+                            <li class="list-group-item" v-if="summary.solutions.length">
                                 <strong>Предложенные решения:</strong>
                                 <ul class="mt-1">
-                                    <template v-for="(item, i) in form.solutions">
-                                        <li :key="i" v-if="item">
-                                            <h6 class="fw-bold small">{{ issueStore.byId(i).name }}</h6>
-                                            <p class="mb-1 small" v-for="p in item">{{ p }}</p>
-                                        </li>
-                                    </template>
+                                    <li v-for="item in summary.solutions" :key="item.id">
+                                        <h6 class="fw-bold small">{{ item.name }}</h6>
+                                        <p class="mb-1 small" v-for="p in item.items">{{ p }}</p>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="list-group-item" v-else>
-                                <p class="alert alert-info mb-0">
-                                    Предложений по решению проблемы не поступило
-                                </p>
+                                <p class="alert alert-info mb-0">Предложений по решению проблемы не поступило</p>
                             </li>
-
 
                             <!-- Трудности -->
-                            <li class="list-group-item" v-if="hasIssueSelections(form.difficulties)">
+                            <li class="list-group-item" v-if="summary.difficulties.length">
                                 <strong>Трудности:</strong>
                                 <ul class="mt-1">
-                                    <template v-for="(item, i) in form.difficulties">
-                                        <li :key="i" v-if="item">
-                                            <h6 class="fw-bold small">{{ issueStore.byId(i).name }}</h6>
-                                            <p class="mb-1 small" v-for="p in item">{{ p }}</p>
-                                        </li>
-                                    </template>
+                                    <li v-for="item in summary.difficulties" :key="item.id">
+                                        <h6 class="fw-bold small">{{ item.name }}</h6>
+                                        <p class="mb-1 small" v-for="p in item.items">{{ p }}</p>
+                                    </li>
                                 </ul>
                             </li>
-
                             <li class="list-group-item" v-else>
-                                <p class="alert alert-info mb-0">
-                                    Трудностей реализации не обнаружено
-                                </p>
+                                <p class="alert alert-info mb-0">Трудностей реализации не обнаружено</p>
                             </li>
 
                             <!-- Форматы помощи -->
-                            <li class="list-group-item" v-if="form.help_formats.length">
+                            <li class="list-group-item" v-if="summary.help_formats.length">
                                 <strong>Форматы помощи:</strong>
                                 <ul class="mt-1">
-                                    <li v-for="(item, i) in form.help_formats" :key="i">
-                                        <p class="mb-1 small"> {{ helpStore.byId(item).name }}</p>
+                                    <li v-for="item in summary.help_formats" :key="item.id">
+                                        <p class="mb-1 small">{{ item.name }}</p>
                                     </li>
                                 </ul>
                             </li>
 
                             <!-- Комментарий -->
-                            <li class="list-group-item" v-if="form.comment">
+                            <li class="list-group-item" v-if="summary.comment">
                                 <strong>Комментарий к задаче:</strong>
-                                <div class="mt-1 text-muted">
-                                    {{ form.comment }}
-                                </div>
+                                <div class="mt-1 text-muted">{{ summary.comment }}</div>
                             </li>
 
                         </ul>
-
                     </div>
                 </div>
-
             </template>
 
             <nav style="position: sticky; bottom:20px;z-index: 100;">
@@ -278,22 +409,22 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
                     <template v-if="step>1&&step<6">
                         <button type="button"
                                 @click="goBack"
-                                class="btn btn-light p-3 border-light-subtle">Назад
+                                class="btn btn-light p-3 border-light-subtle rounded-start-4">Назад
                         </button>
                         <button type="submit"
-                                class="btn btn-primary p-3">Вперед
+                                class="btn btn-primary p-3 rounded-end-4">Вперед
                         </button>
                     </template>
                     <template v-if="step===1">
                         <button type="submit"
-                                class="btn btn-primary p-3">Приступить
+                                class="btn btn-primary p-3 rounded-4">Приступить
                         </button>
                     </template>
 
                     <template v-if="step===6">
                         <button
                             type="submit"
-                            class="btn btn-primary p-3"
+                            class="btn btn-primary p-3 rounded-4"
                             :disabled="submitting">
                             {{ submitting ? 'Отправка...' : 'Отправить' }}
                         </button>
@@ -324,6 +455,11 @@ export default {
             maxStep: 6,
             submitting: false,
             isRecording: false,
+            needHelp: false,
+            attachDocs: false,
+            needAddressDetails: false,
+            needVoiceRecord: false,
+            needMap: false,
             mediaRecorder: null,
             audioChunks: [],
             alertStore: useAlertStore(),
@@ -339,9 +475,24 @@ export default {
                 from_user_id: "",
                 to_user_id: "",
                 municipality_id: "",
+                address: {
+                    city: "",
+                    district: "",
+                    street: "",
+                    house: "",
+                    coords: {
+                        lat: 0,
+                        lon: 0,
+                    }
+                },
                 received_at: "",
                 documents: [],
                 received_from: "",
+                fio: {
+                    last: "",
+                    first: "",
+                    middle: ""
+                },
                 problem_description: "",
                 help_formats: [],
                 comment: "",
@@ -359,6 +510,41 @@ export default {
     },
 
     computed: {
+        summary() {
+            const municipality = this.form.municipality_id
+                ? this.municipalityStore.byId(this.form.municipality_id)
+                : null
+
+            const mapIssues = (obj) => {
+                if (!obj) return []
+                return Object.entries(obj)
+                    .filter(([_, arr]) => arr && arr.length)
+                    .map(([id, arr]) => ({
+                        id,
+                        name: this.issueStore.byId(id)?.name || "Неизвестная категория",
+                        items: arr
+                    }))
+            }
+
+            return {
+                received_from: this.form.received_from || null,
+                phone: this.form.phone || null,
+                municipality: municipality ? municipality.name : null,
+
+                problems: mapIssues(this.form.problems),
+                solutions: mapIssues(this.form.solutions),
+                difficulties: mapIssues(this.form.difficulties),
+
+                problem_description: this.form.problem_description || null,
+
+                help_formats: (this.form.help_formats || []).map(id => ({
+                    id,
+                    name: this.helpStore.byId(id)?.name || "Неизвестно"
+                })),
+
+                comment: this.form.comment || null
+            }
+        },
         hasAvailableHelpFormats() {
             return this.helpStore.items.length > this.form.help_formats.length
         },
@@ -373,15 +559,28 @@ export default {
         },
         difficulties() {
             return this.issueStore.items?.filter(item => item?.type === 2)
+        },
+        fullAddress() {
+            return [
+                this.form.address.city,
+                this.form.address.district,
+                this.form.address.street,
+                this.form.address.house
+            ]
+                .filter(Boolean)        // убираем пустые поля
+                .join(', ')             // собираем в строку
         }
     },
 
     mounted() {
 
+        window.addEventListener('change-address', this.onAddressChange)
 
         this.municipalityStore.fetchAll()
         this.issueStore.fetchAll()
         this.helpStore.fetchAll()
+
+        this.loadForm()
 
         const today = new Date()
         today.setMinutes(today.getMinutes() - today.getTimezoneOffset())
@@ -389,18 +588,74 @@ export default {
         const formatted = today.toISOString().slice(0, 10)
 
         this.form.received_at = formatted;
+
+
+    },
+
+    beforeUnmount() {
+        window.removeEventListener('change-address', this.onAddressChange)
     },
     methods: {
+        openMapPicker() {
+            // Здесь откроешь модалку, карту или мини‑апп
+            console.log("Открыть выбор на карте");
+        },
         isGuest() {
             return (this.user?.role ?? 0) === 0
         },
+        saveForm() {
+            localStorage.setItem("report_form_received_from", this.form.received_from)
+            localStorage.setItem("report_form_fio_first", this.form.fio.first)
+            localStorage.setItem("report_form_fio_last", this.form.fio.last)
+            localStorage.setItem("report_form_fio_middle", this.form.fio.middle)
+            localStorage.setItem("report_form_received_from", this.form.received_from)
+            localStorage.setItem("report_form_phone", this.form.phone)
+            localStorage.setItem("report_form_received_municipality_id", this.form.municipality_id)
+        },
+        loadForm() {
 
+            const receivedFrom = localStorage.getItem("report_form_received_from")
+            const phone = localStorage.getItem("report_form_phone")
+            const municipalityId = localStorage.getItem("report_form_received_municipality_id")
+            const fioFirst = localStorage.getItem("report_form_fio_first")
+            const fioLast = localStorage.getItem("report_form_fio_last")
+            const fioMiddle = localStorage.getItem("report_form_fio_middle")
+
+            if (receivedFrom !== null) {
+                this.form.received_from = receivedFrom
+            }
+
+            if (fioFirst !== null) {
+                this.form.fio.first = fioFirst
+            }
+
+            if (fioLast !== null) {
+                this.form.fio.last = fioLast
+            }
+
+            if (fioMiddle !== null) {
+                this.form.fio.middle = fioMiddle
+            }
+
+
+            if (phone !== null) {
+                this.form.phone = phone
+            }
+
+            if (municipalityId !== null) {
+                this.form.municipality_id = municipalityId
+            }
+        },
         nextStep() {
+            this.saveForm()
+
             if (this.isGuest() && this.step === 2) {
                 this.step = 5
                 return
             }
             this.step++
+            window.scrollTo(0, 0)
+
         },
 
         goBack() {
@@ -502,7 +757,7 @@ export default {
             this.form.audio_files.forEach((item, index) => {
                 const blob = item.file || item
                 const file = blob instanceof Blob
-                    ? new File([blob], `audio-${index}.webm`, { type: blob.type || 'audio/webm' })
+                    ? new File([blob], `audio-${index}.webm`, {type: blob.type || 'audio/webm'})
                     : blob
                 fd.append(`audio_files[${index}]`, file)
             })
@@ -530,7 +785,19 @@ export default {
                 this.form.help_formats.push("");
             }
         },
+        onAddressChange(event) {
+            const data = event.detail
 
+            this.form.address = {
+                city: data.city,
+                district: data.borough,
+                street: data.road,
+                house: data.house_number,
+                lat: data.lat,
+                lng: data.lng,
+                full: data.address
+            }
+        },
 
         async submitForm() {
             if (!this.validateStep()) {
@@ -559,7 +826,7 @@ export default {
                 if (result.report_id) {
                     this.$router.push({
                         name: 'ChatPage',
-                        query: { report: result.report_id },
+                        query: {report: result.report_id},
                     })
                 }
             } finally {

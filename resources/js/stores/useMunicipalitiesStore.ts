@@ -10,7 +10,7 @@ export interface Municipality {
     updated_at?: string
 }
 
-const path = '/bot-api/municipalities'
+const path = '/api/municipalities'
 
 export const useMunicipalitiesStore = defineStore('municipalities', {
     state: () => ({

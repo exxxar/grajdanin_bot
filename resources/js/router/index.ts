@@ -7,6 +7,7 @@ const MenuPage = defineAsyncComponent(() => import('../Pages/MenuPage.vue'))
 const HelpPage = defineAsyncComponent(() => import('../Pages/HelpPage.vue'))
 const UserPage = defineAsyncComponent(() => import('../Pages/AdminPages/UserPage.vue'))
 const ExcelExportPage = defineAsyncComponent(() => import('../Pages/AdminPages/ExcelExportPage.vue'))
+const DialogsPage = defineAsyncComponent(() => import('../Pages/DialogsPage.vue'))
 const ChatPage = defineAsyncComponent(() => import('../Pages/ChatPage.vue'))
 const AuthPage = defineAsyncComponent(() => import('../Pages/AuthPage.vue'))
 const ProfilePage = defineAsyncComponent(() => import('../Pages/ProfilePage.vue'))
@@ -48,11 +49,21 @@ const routes = [
         component: ReportsPage,
     },
     {
-        path: '/chat',
+        path: '/chats',
+        name: 'DialogsPage',
+        component: DialogsPage,
+        meta: {
+            hide_menu: true,
+            hide_footer: true,
+        }
+    },
+    {
+        path: '/chats/:id',
         name: 'ChatPage',
         component: ChatPage,
         meta: {
             hide_menu: true,
+            hide_footer: true,
         }
     },
     {
