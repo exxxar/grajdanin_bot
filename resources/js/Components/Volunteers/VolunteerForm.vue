@@ -18,21 +18,50 @@
         <template v-if="step === 1">
             <h5 class="mb-3">Личные данные</h5>
 
-            <div class="form-floating mb-2">
-                <input v-model="form.lastName" class="form-control" id="lastName" placeholder="Фамилия">
-                <label for="lastName">Фамилия</label>
-            </div>
-            <div class="text-danger small mb-2">{{ errors.lastName }}</div>
+            <div class="row g-2">
 
-            <div class="form-floating mb-2">
-                <input v-model="form.firstName" class="form-control" id="firstName" placeholder="Имя">
-                <label for="firstName">Имя</label>
-            </div>
-            <div class="text-danger small mb-2">{{ errors.firstName }}</div>
+                <!-- ФАМИЛИЯ -->
+                <div class="col-12">
+                    <div class="form-floating">
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="lastName"
+                            placeholder="Фамилия"
+                            v-model="form.fio.last"
+                        >
+                        <label for="lastName">Фамилия</label>
+                    </div>
+                </div>
 
-            <div class="form-floating mb-2">
-                <input v-model="form.middleName" class="form-control" id="middleName" placeholder="Отчество">
-                <label for="middleName">Отчество</label>
+                <!-- ИМЯ -->
+                <div class="col-12">
+                    <div class="form-floating">
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="firstName"
+                            placeholder="Имя"
+                            v-model="form.fio.first"
+                        >
+                        <label for="firstName">Имя</label>
+                    </div>
+                </div>
+
+                <!-- ОТЧЕСТВО -->
+                <div class="col-12">
+                    <div class="form-floating mb-2">
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="middleName"
+                            placeholder="Отчество"
+                            v-model="form.fio.middle"
+                        >
+                        <label for="middleName">Отчество</label>
+                    </div>
+                </div>
+
             </div>
 
             <div class="form-floating mb-2">
@@ -454,9 +483,11 @@ export default {
                 }
             ],
             form: {
-                lastName: "",
-                firstName: "",
-                middleName: "",
+                fio: {
+                    last: "",
+                    first: "",
+                    middle: ""
+                },
                 birthDate: "",
                 gender: "",
                 citizenship: "",
@@ -503,14 +534,59 @@ export default {
             errors: {},
         };
     },
-
+    mounted() {
+        this.loadForm()
+    },
     methods: {
+        saveForm() {
+            localStorage.setItem("report_form_received_from", this.form.received_from)
+            localStorage.setItem("report_form_fio_first", this.form.fio.first)
+            localStorage.setItem("report_form_fio_last", this.form.fio.last)
+            localStorage.setItem("report_form_fio_middle", this.form.fio.middle)
+            localStorage.setItem("report_form_received_from", this.form.received_from)
+            localStorage.setItem("report_form_phone", this.form.phone)
+            localStorage.setItem("report_form_received_municipality_id", this.form.municipality_id)
+        },
+        loadForm() {
+
+            const receivedFrom = localStorage.getItem("report_form_received_from")
+            const phone = localStorage.getItem("report_form_phone")
+            const municipalityId = localStorage.getItem("report_form_received_municipality_id")
+            const fioFirst = localStorage.getItem("report_form_fio_first")
+            const fioLast = localStorage.getItem("report_form_fio_last")
+            const fioMiddle = localStorage.getItem("report_form_fio_middle")
+
+            if (receivedFrom !== null) {
+                this.form.received_from = receivedFrom
+            }
+
+            if (fioFirst !== null) {
+                this.form.fio.first = fioFirst
+            }
+
+            if (fioLast !== null) {
+                this.form.fio.last = fioLast
+            }
+
+            if (fioMiddle !== null) {
+                this.form.fio.middle = fioMiddle
+            }
+
+
+            if (phone !== null) {
+                this.form.phone = phone
+            }
+
+            if (municipalityId !== null) {
+                this.form.municipality_id = municipalityId
+            }
+        },
         validateStep() {
             this.errors = {};
 
             if (this.step === 1) {
-                if (!this.form.lastName) this.errors.lastName = "Введите фамилию";
-                if (!this.form.firstName) this.errors.firstName = "Введите имя";
+                if (!this.form.fio.last) this.errors.lastName = "Введите фамилию";
+                if (!this.form.fio.first) this.errors.firstName = "Введите имя";
                 if (!this.form.birthDate) this.errors.birthDate = "Укажите дату рождения";
             }
 
