@@ -685,7 +685,7 @@ export default {
         validateStep() {
             switch (this.step) {
                 case 1:
-                    if (!this.form.received_from?.trim()) {
+                    if (!this.form.fio.first?.trim()||!this.form.fio.last?.trim()) {
                         this.alertStore.show('Укажите ФИО заявителя.')
                         return false
                     }
