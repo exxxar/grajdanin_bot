@@ -2,23 +2,26 @@
     <div class="card shadow-sm border-0">
         <div class="card-body d-flex align-items-center gap-2">
 
-            <div class="avatar bg-primary text-white rounded-circle d-flex justify-content-center align-items-center"
-                 style="width: 40px; height: 40px;">
-                <i class="fa-solid fa-user"></i>
-            </div>
+            <template v-if="user.role>0">
+                <div class="avatar bg-primary text-white rounded-circle d-flex justify-content-center align-items-center"
+                     style="width: 40px; height: 40px;">
+                    <i class="fa-solid fa-user"></i>
+                </div>
 
-            <div
-                @click="goTo('ProfilePage')"
-                v-if="user.role>0">
-                <div class="fw-bold">{{ user.name ?? 'Имя не указано' }}</div>
-                <div class="text-muted" style="font-size:12px;">{{ user.phone }}</div>
-                <div class="text-muted" style="font-size:12px;">{{ roles[user.role] }}</div>
-            </div>
-            <div v-else>
+                <div
+                    @click="goTo('ProfilePage')"
+                >
+                    <div class="fw-bold">{{ user.name ?? 'Имя не указано' }}</div>
+                    <div class="text-muted" style="font-size:12px;">{{ user.phone }}</div>
+                    <div class="text-muted" style="font-size:12px;">{{ roles[user.role] }}</div>
+                </div>
+            </template>
+
+            <template v-else>
                 <p
                     @click="goTo('AuthPage')"
                     class="mb-0" style="line-height: 100%;">Войдите в систему</p>
-            </div>
+            </template>
 
         </div>
     </div>
