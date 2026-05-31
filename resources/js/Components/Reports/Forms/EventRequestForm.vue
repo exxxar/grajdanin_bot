@@ -94,6 +94,7 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
                 <label>Целевая аудитория</label>
             </div>
 
+            <h6>Количество участников</h6>
             <!-- BUTTON GROUP -->
             <div class="btn-group w-100 mb-2" role="group">
 
