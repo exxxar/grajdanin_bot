@@ -173,11 +173,11 @@
                             <input
                                 type="text"
                                 class="form-control"
-                                v-model="problems[0][index]"
+                                :value="problems[0][index]"
+                                @input="updateCustomProblem(index, $event.target.value)"
                                 :id="'custom-problem-'+index"
                                 placeholder="Введите текст"
                             >
-
                             <label :for="'custom-problem-'+index">
                                 Проблема #{{ index + 1 }}
                             </label>
@@ -297,21 +297,35 @@ export default {
     data() {
         return {
             selected: null,
-            problems: {},
             globalSearch: "",
             search: ""
-
         }
     },
 
     computed: {
+
+        problems: {
+            get() {
+                return this.modelValue || {}
+            },
+
+            set(value) {
+                this.$emit('update:modelValue', value)
+            }
+        },
+
         searchResultsByCategory() {
+
             const q = this.globalSearch.trim().toLowerCase()
-            if (!q) return null
+
+            if (!q) {
+                return null
+            }
 
             const results = []
 
             for (const cat of this.issues) {
+
                 const variants = typeof cat.variants === "string"
                     ? JSON.parse(cat.variants || "[]")
                     : (cat.variants || [])
@@ -330,23 +344,29 @@ export default {
 
             return results
         },
+
         filteredVariants() {
+
             const q = this.search.trim().toLowerCase()
 
-            if (!q) return this.parsedVariants
+            if (!q) {
+                return this.parsedVariants
+            }
 
             return this.parsedVariants.filter(v =>
                 v.toLowerCase().includes(q)
             )
         },
+
         parsedVariants() {
+
             if (!this.selected?.variants) {
                 return []
             }
 
             try {
 
-                return typeof this.selected.variants === 'string'
+                return typeof this.selected.variants === "string"
                     ? JSON.parse(this.selected.variants)
                     : this.selected.variants
 
@@ -356,27 +376,6 @@ export default {
 
             }
 
-        }
-
-    },
-
-    watch: {
-
-        modelValue: {
-            immediate: true,
-            deep: true,
-
-            handler(val) {
-                this.problems = JSON.parse(JSON.stringify(val || {}))
-            }
-        },
-
-        problems: {
-            deep: true,
-
-            handler(val) {
-                this.$emit('update:modelValue', val)
-            }
         }
 
     },
@@ -391,25 +390,27 @@ export default {
 
             const key = this.selected.id
 
-            if (!this.problems[key]) {
-                this.problems[key] = []
+            const next = { ...this.problems }
+
+            if (!next[key]) {
+                next[key] = []
             }
 
-            const index = this.problems[key].indexOf(item)
+            if (next[key].includes(item)) {
 
-            if (index !== -1) {
-
-                this.problems[key].splice(index, 1)
+                next[key] = next[key].filter(i => i !== item)
 
             } else {
 
-                this.problems[key].push(item)
+                next[key] = [...next[key], item]
 
             }
 
-            if (this.problems[key].length === 0) {
-                delete this.problems[key]
+            if (next[key].length === 0) {
+                delete next[key]
             }
+
+            this.problems = next
 
         },
 
@@ -419,31 +420,49 @@ export default {
                 return
             }
 
-            delete this.problems[this.selected.id]
+            const next = { ...this.problems }
+
+            delete next[this.selected.id]
+
+            this.problems = next
 
         },
 
         addAnotherProblem() {
 
-            if (!this.problems[0]) {
+            const next = { ...this.problems }
 
-                this.problems[0] = [""]
+            next[0] = [...(next[0] || []), ""]
 
-            } else {
-
-                this.problems[0].push("")
-
-            }
+            this.problems = next
 
         },
 
         removeIssue(index) {
 
-            this.problems[0].splice(index, 1)
+            const next = { ...this.problems }
 
-            if (this.problems[0].length === 0) {
-                delete this.problems[0]
+            next[0] = [...(next[0] || [])]
+
+            next[0].splice(index, 1)
+
+            if (next[0].length === 0) {
+                delete next[0]
             }
+
+            this.problems = next
+
+        },
+
+        updateCustomProblem(index, value) {
+
+            const next = { ...this.problems }
+
+            next[0] = [...(next[0] || [])]
+
+            next[0][index] = value
+
+            this.problems = next
 
         }
 

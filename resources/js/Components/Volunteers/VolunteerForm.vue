@@ -534,9 +534,7 @@ export default {
             errors: {},
         };
     },
-    mounted() {
-        this.loadForm()
-    },
+
     methods: {
         saveForm() {
             localStorage.setItem("report_form_received_from", this.form.received_from)

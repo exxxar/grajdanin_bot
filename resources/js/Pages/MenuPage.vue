@@ -7,7 +7,7 @@ import RoleSwitcher from "@/Components/Users/RoleSwitcher.vue";
 import {useI18n} from "vue-i18n";
 import MenuVolunteer from "@/Components/MenuVolunteer.vue";
 import MenuOfficial from "@/Components/MenuOfficial.vue";
-
+import MenuCardsSkeleton from "@/Components/MenuCardsSkeleton.vue";
 const {t} = useI18n();
 </script>
 
@@ -35,6 +35,8 @@ const {t} = useI18n();
 
         <RoleSwitcher v-if="user.base_role===5"></RoleSwitcher>
     </div>
+
+    <MenuCardsSkeleton v-else />
 
 </template>
 <script>

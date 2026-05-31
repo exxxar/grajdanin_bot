@@ -19,8 +19,10 @@ const BlockedPage = defineAsyncComponent(() => import('../Pages/BlockedPage.vue'
 const IssuesPage = defineAsyncComponent(() => import('../Pages/AdminPages/IssuesPage.vue'))
 const MunicipalityPage = defineAsyncComponent(() => import('../Pages/AdminPages/MunicipalityPage.vue'))
 const ReportPage = defineAsyncComponent(() => import('../Pages/AdminPages/ReportPage.vue'))
-const VolunteerPage = defineAsyncComponent(() => import('../Pages/AdminPages/VolunteerPage.vue'))
 const HelpsPage = defineAsyncComponent(() => import('../Pages/AdminPages/HelpsPage.vue'))
+const VolunteerPage = defineAsyncComponent(() => import('../Pages/VolunteerPage.vue'))
+const IncomingReportPage = defineAsyncComponent(() => import('../Pages/IncomingReportPage.vue'))
+const EventRequestPage = defineAsyncComponent(() => import('../Pages/EventRequestPage.vue'))
 
 
 const routes = [
@@ -32,6 +34,23 @@ const routes = [
             hide_menu: true,
         }
 
+    },
+
+
+    {
+        path: '/volunteer',
+        name: 'VolunteerPage',
+        component: VolunteerPage,
+    },
+    {
+        path: '/incoming',
+        name: 'IncomingReportPage',
+        component: IncomingReportPage,
+    },
+    {
+        path: '/event',
+        name: 'EventRequestPage',
+        component: EventRequestPage,
     },
     {
         path: '/profile',

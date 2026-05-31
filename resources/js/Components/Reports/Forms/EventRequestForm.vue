@@ -5,7 +5,7 @@ import FileUploader from "@/Components/Reports/Modules/FileUploader.vue";
 </script>
 
 <template>
-    <form @submit.prevent="submitForm" class="card rounded-2">
+    <form @submit.prevent="submitForm" class="card rounded-2 ">
 
         <div class="card-body">
             <h5 class="mb-2">Заявка на мероприятие</h5>
