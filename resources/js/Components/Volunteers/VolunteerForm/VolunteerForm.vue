@@ -161,8 +161,7 @@
                         <button
                             type="button"
                             @click="back"
-                            class="btn btn-light p-3 rounded-start-4"
-                            style="flex: 1;"
+                            class="btn btn-light p-2 rounded-start-4"
                         >
                             К секциям
                         </button>
@@ -170,8 +169,8 @@
                         <button
                             type="button"
                             @click="next"
-                            class="btn btn-primary p-3 rounded-end-4"
-                            style="flex: 2;"
+                            class="btn btn-primary p-2 rounded-end-4"
+
                         >
                             Вперед <span>{{ step  }}</span> / <span>{{ sections.length }}</span>
                         </button>
