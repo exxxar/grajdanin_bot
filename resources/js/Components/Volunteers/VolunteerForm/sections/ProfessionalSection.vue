@@ -23,18 +23,21 @@
                 </label>
 
                 <div
-                    v-for="skill in skillsList"
+                    v-for="(skill, index) in skillsList"
                     :key="skill"
                     class="form-check"
                 >
                     <input
                         class="form-check-input"
                         type="checkbox"
+                        :id="'skill-prof-'+index"
                         :value="skill"
                         v-model="model.skills"
                     >
 
-                    <label class="form-check-label">
+                    <label
+                        :for="'skill-prof-'+index"
+                        class="form-check-label">
                         {{ skill }}
                     </label>
                 </div>

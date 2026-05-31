@@ -92,19 +92,22 @@
                 </label>
 
                 <div
-                    v-for="dir in directionsList"
+                    v-for="(dir, index) in directionsList"
                     :key="dir"
                     class="form-check"
                 >
 
                     <input
+                        :id="'direction-'+index"
                         class="form-check-input"
                         type="checkbox"
                         :value="dir"
                         v-model="model.directions"
                     >
 
-                    <label class="form-check-label">
+                    <label
+                        :for="'direction-'+index"
+                        class="form-check-label">
                         {{ dir }}
                     </label>
 

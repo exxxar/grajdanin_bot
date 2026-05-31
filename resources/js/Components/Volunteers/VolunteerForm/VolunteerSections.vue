@@ -20,10 +20,10 @@
                 <div class="card-body">
 
                     <div
-                        class="d-flex justify-content-between"
+                        class="d-flex justify-content-between align-items-start"
                     >
 
-                    <span>
+                    <span style="line-height:100%;">
                         <i
                             :class="section.icon"
                             class="me-2"
