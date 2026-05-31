@@ -20,7 +20,7 @@
                 :sections="sections"
                 :current="currentSection"
                 :get-progress="sectionProgress"
-                @select="currentSection = $event"
+                @select="selectSection"
 
             />
 
@@ -172,7 +172,7 @@
                             class="btn btn-primary p-2 rounded-end-4"
 
                         >
-                            Вперед <span>{{ step  }}</span> / <span>{{ sections.length }}</span>
+                            Вперед <span>{{ step+1  }}</span> / <span>{{ sections.length }}</span>
                         </button>
                     </div>
                 </div>
@@ -290,7 +290,9 @@ export default {
             ]
         };
     },
+    mounted() {
 
+    },
     computed: {
         canSend() {
             return this.totalProgress >= 50 &&
@@ -313,7 +315,22 @@ export default {
             return useVolunteerProgress(this.form).sectionProgress;
         },
 
+
+        totalProgress() {
+            const values = this.sections.map(
+                s => this.sectionProgress(s.id)
+            );
+
+            return Math.round(
+                values.reduce((a, b) => a + b, 0) / values.length
+            );
+        }
+
+    },
+
+    methods: {
         next() {
+
             const max = this.sections.length
             if (this.step < max)
                 this.step++
@@ -337,26 +354,21 @@ export default {
                 inline: 'center'
             });*/
         },
-       back(){
-           this.currentSection = "sections"
-           window.scrollTo({
-               top: 0,
-               behavior: 'smooth'
-           });
-       },
-        totalProgress() {
-            const values = this.sections.map(
-                s => this.sectionProgress(s.id)
-            );
+        back(){
 
-            return Math.round(
-                values.reduce((a, b) => a + b, 0) / values.length
-            );
-        }
 
-    },
+            this.currentSection = "sections"
 
-    methods: {
+
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        },
+        selectSection(event){
+            this.currentSection = event
+            this.step = this.sections.findIndex(s=>s.id === this.currentSection) || 0
+        },
         validateStep() {
             this.errors = {};
 
