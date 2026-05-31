@@ -14,7 +14,7 @@ const {t} = useI18n();
 <template>
 
 
-    <div class="container-fluid p-1" v-if="user">
+    <div class="container-fluid p-2" style="min-height:500px;" v-if="user">
         <MenuUser></MenuUser>
 
         <template v-if="user.role === 2">

@@ -38,6 +38,7 @@ import PrimaryForm from "@/Components/Users/Forms/PrimaryForm.vue";
 
     <GlobalAlert></GlobalAlert>
     <GlobalConfirmModal></GlobalConfirmModal>
+
     <slot/>
 
 
@@ -62,11 +63,11 @@ import PrimaryForm from "@/Components/Users/Forms/PrimaryForm.vue";
 
         <button
             type="button"
-            v-bind:class="{'active':$route.name === 'ChatPage'}"
-            @click="goTo('ChatPage')"
+            v-bind:class="{'active':$route.name === 'DialogsPage'}"
+            @click="goTo('DialogsPage')"
             class="nav-item">
             <i class="fa-regular fa-comments"></i>
-            <span v-if="$route.name === 'ChatPage'">Чат</span>
+            <span v-if="$route.name === 'DialogsPage'">Чат</span>
         </button>
 
         <button
@@ -169,7 +170,7 @@ export default {
                 },
                 {
                     name: 'Сообщения',
-                    route: 'ChatPage',
+                    route: 'DialogsPage',
                     icon: 'fa-solid fa-comments'
                 },
                 {
