@@ -1,13 +1,22 @@
+<script setup>
+import ShareLinks from "@/Components/ShareLink.vue";
+</script>
 <template>
     <footer
-        style="min-height:300px;"
+        style="min-height:700px;"
         class="footer bg-light border-top mt-4 pt-4 pb-5 position-relative">
 
         <!-- Контент футера -->
         <div class="container text-center">
 
+            <ShareLinks
+                title="Стань волонтёром"
+                text="Присоединяйся к нашей команде"
+                :url="getCurrentLink"
+            />
+
             <!-- Описание -->
-            <p class="text-muted small mb-3">
+            <p class="text-muted small my-3">
                 Платформа для обращений граждан и взаимодействия с администрацией.
                 Работает в тестовом режиме.
             </p>
@@ -47,7 +56,11 @@ export default {
     beforeUnmount() {
         window.removeEventListener('scroll', this.checkScroll)
     },
-
+    computed: {
+        getCurrentLink() {
+            return window.location.href || ''
+        }
+    },
     methods: {
         checkScroll() {
             this.showScroll = window.scrollY > 200
