@@ -4,9 +4,15 @@
         <div class="card-body">
 
 
-            <h5 class="mb-3">
+
+            <button
+                v-if="canNativeShare"
+                class="btn btn-primary mb-3 w-100 p-3 rounded-4"
+                @click="nativeShare"
+            >
+                <i class="fa-solid fa-share-nodes me-2"></i>
                 Поделиться
-            </h5>
+            </button>
 
             <div class="d-flex flex-wrap gap-2 justify-content-center">
 
@@ -63,14 +69,7 @@
 
             </div>
 
-            <button
-                v-if="canNativeShare"
-                class="btn btn-primary mt-3 w-100 p-3 rounded-4"
-                @click="nativeShare"
-            >
-                <i class="fa-solid fa-share-nodes me-2"></i>
-                Поделиться через устройство
-            </button>
+
 
         </div>
     </div>
